@@ -1,0 +1,85 @@
+---
+title: "articolo_scacchi"
+author: "Nome Autore"
+date: "2026-03-12"
+format:
+  html: default
+  pdf: default
+---
+
+# Abstract
+
+Scrivi qui il riassunto dell'articolo.
+
+# Introduzione
+
+Scrivi qui l'introduzione.
+
+# Metodi
+
+
+## Materials and Methods
+
+### Sample
+The study involved a total sample of 104 typically developing Italian children (56 boys, 48 girls), aged between 5 and 7 years (mean age = 6.07 years, SD = 0.62). Participants were recruited from the third year of two preschools ("D. Ricci" in Acquasparta and "G.S. Bernardo" in Narni) and from the first and second years of four primary schools ("A.B. Sabin" in Acquasparta, Montecchio Primary School, "Narni S. Lucia", and "Narni Centro"). Children were randomly assigned to two experimental conditions: 57 (29 boys, 28 girls) joined the Experimental Chess Protocol Group (GSPS), while 47 (27 boys, 20 girls) were placed in the Control Group (CG). To ensure equivalence between groups, each experimental class was matched with a control class of the same school level, resulting in balanced age and group size distribution. After testing, children in the control group also participated in chess activities.
+
+Inclusion criteria were: native Italian speakers, no primary sensory deficits (visual or auditory), no neurological conditions, and no significant emotional or behavioral issues. To control for general cognitive functioning, all participants completed the Raven’s Coloured Progressive Matrices, a non-verbal measure of intellectual ability. Only children scoring within the normative range for their age group (percentile ≤ 5) were included. None had prior structured chess experience. The study adhered to the ethical principles of the Declaration of Helsinki and was approved by the local ethics committee. Written informed consent was obtained from parents, and assent from each child.
+
+### Experimental Methodology
+Children were individually tested in a quiet, empty room at their school. The GSPS group was assessed immediately before (T0) and after (T1) participating in the Giant Chess Game (GCG) training (Bocchi et al., 2022). The control group, which continued regular classroom activities without chess practice, was also tested at T0 and T1. The order of tests was counterbalanced for each participant.
+
+#### Corsi Block-Tapping Test
+The Corsi Block-Tapping Test (CBT; Spinnler & Tognoni, 1987) evaluates visuospatial working memory and short-term memory. It consists of a board with 9 irregularly arranged cubes. The examiner taps a sequence of cubes, which the child must reproduce in the same order (forward span, CBT-F) and in reverse order (backward span, CBT-B). Sequence length increases until the child’s capacity limit is reached.
+
+#### Raven’s Matrices
+Raven’s Coloured Progressive Matrices (Raven et al., 2003) is a non-verbal test of abstract reasoning, used to assess fluid intelligence (g factor). Children are shown incomplete visual patterns and must select the correct piece to complete each matrix from several options. Difficulty increases progressively.
+
+#### Tower of London
+The Tower of London (TOL; Shallice, 1982), included in the BVN 5-11 battery (Bisiacchi et al., 2005), assesses planning, problem-solving, and the ability to anticipate consequences. The task uses three pegs of different heights and colored balls. Children must reproduce a target configuration from a standard starting position, following rules: only one ball can be moved at a time, peg capacity cannot be exceeded, and the solution must use the fewest moves possible.
+
+#### Minefield Test
+The computerized Minefield Test for children (Bocchi et al., 2022) measures spatial memory, navigation skills, and visuospatial planning strategies. Children interact with an 8x8 grid on a computer screen using a mouse. The battery includes three progressively difficult tests isolating and combining cognitive components: working memory, planning, and their integration.
+
+- In the memory test, children view the grid with a number of “moles” for 10 seconds, followed by a 5-second retention interval. They must recall and click the exact positions of the moles. Difficulty increases from 2 to 8 items.
+- In the planning test, children must trace the shortest path from start to finish, avoiding visible obstacles (moles). Difficulty increases with more obstacles.
+- In the combined test, obstacles disappear after 10 seconds, requiring children to remember their locations and plan the shortest path accordingly.
+
+The Minefield Test provides an integrated assessment of spatial memory, planning, and navigation strategies, allowing both quantitative and qualitative analysis of visuospatial problem-solving.
+
+#### Teacher Questionnaires
+The ABAS-II (Adaptive Behavior Assessment System, Second Edition; Harrison & Oakland, 2003) is a standardized tool for assessing adaptive behavior from early childhood to adulthood. The Teacher Form was used to obtain ecological evaluations of children’s adaptive skills in the school context, providing standardized scores for individual domains and composite indices, including the General Adaptive Composite (GAC).
+
+The BRIEF-2 (Behavior Rating Inventory of Executive Function, Second Edition; Gioia et al., 2015) is a standardized questionnaire for assessing executive functions in daily life. The Teacher Form was administered to gather information on observable executive behaviors in the school context. The questionnaire covers behavioral, emotional, and cognitive regulation, as well as a global executive composite (GEC), and is widely used in clinical and research settings.
+
+### Experimental Procedure
+
+The Giant Chess Game (GCG) consisted of 8 weekly chess lessons, each lasting 1 hour and divided into three work units. Lessons were conducted by a chess master with 15 years of experience, affiliated with FIDE (Fédération Internationale Des Échecs), the international governing body for chess. The large chessboard (2.5 m x 2.5 m) was divided into 8 rows and 8 columns. Rows of squares of the same color that coincide with the corners are called “diagonals”.
+
+#### 3.3.1 Giant Chess Game Training
+
+##### Work Unit 1
+The activity begins with a familiarization phase using the giant chessboard (Fig. 3.6). Children are encouraged to explore the board freely, moving across it to actively discover its spatial features. Simple and gradual instructions are given regarding movements (e.g., one step forward, two steps back, one step to the right), aiming to make fundamental concepts such as squares, rows, and steps concrete and understandable. The teacher then introduces the concept of diagonals through structured play activities. For example, a game uses auditory signals: at the first clap, children stop moving; at the second clap, they must change the color of the square they are standing on. Practically, if a child is moving along black squares diagonally, at the double signal they must switch to a white square, and vice versa.
+
+##### Work Unit 2
+The teacher introduces the King, explaining its movement rules: the King can move one square at a time in any direction (forward, backward, right, left, and diagonally). To help children understand the different roles on the chessboard, they are paired and participate in a game called “Catch the King.” Both move as Kings, one step at a time, aiming to “capture” their partner by reaching their square. This activity dynamically reinforces movement rules and stimulates planning, inhibitory control, and anticipation of the other’s moves.
+
+A similar approach is used to introduce the Queen, who can move any number of squares in all directions (horizontal, vertical, diagonal). Learning occurs through problem situations requiring children to reason about the “control space” of the piece. During rule acquisition, “domain problems” are proposed, such as the classic challenge of placing eight Queens on the board so that none can “attack” another. While the full problem is complex, the version for children is mainly exploratory and educational: one child enters the board as the Queen and chooses a square; the next must place themselves avoiding all squares under the first Queen’s control, and so on.
+
+##### Work Unit 3
+The next phase focuses on the Knight, emphasizing its unique “L-shaped” movement (two squares in one direction and one perpendicular). To facilitate learning, a game called “Knight Race” is proposed, structured as a friendly competition between two children, each moving only as Knights, aiming to reach the opposite side of the board first. A key element emerges: the Knight cannot reach the opposite side in a straight line or with a rigid sequence of four moves. To make the final move without leaving the board, children are guided to change their body orientation, “turning” and changing direction. Through this experience, participants progressively understand that the Knight’s movement is not fixed in a single configuration but can be rotated and applied in various directions in space.
+
+# Risultati
+
+Presenta i risultati ottenuti.
+
+# Discussione
+
+Analizza e discuti i risultati.
+
+# Conclusioni
+
+Riassumi le conclusioni principali.
+
+# Bibliografia
+
+- Inserisci qui le referenze bibliografiche.
