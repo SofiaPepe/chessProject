@@ -1,0 +1,14 @@
+variable,pre_col,post_col,role,include_effectiveness,improvement_direction,min_possible,max_possible,valid_min,valid_max,filter_rule,notes
+CBT_F_SPAN,CBT_F_SPAN_PRE,CBT_F_SPAN_POST,effectiveness_score,yes,higher_better,0,9,0,9,exclude_outside_valid_range,Forward Corsi span; user-confirmed max 9
+CBT_B_SPAN,CBT_B_SPAN_PRE,CBT_B_SPAN_POST,effectiveness_score,yes,higher_better,0,9,0,9,exclude_outside_valid_range,Backward Corsi span; user-confirmed max 9
+TOL_ACC,TOL_ACC_PRE,TOL_ACC_POST,effectiveness_score,yes,higher_better,0,36,0,36,exclude_outside_valid_range,Tower of London accuracy; user-confirmed max 36
+Raven_ACC,Raven_ACC_PRE,Raven_ACC_POST,effectiveness_score,yes,higher_better,0,36,0,36,exclude_outside_valid_range,Raven accuracy; RAVEN_T excluded as timing
+WM_ACC,WM_ACC_PRE,WM_ACC_POST,effectiveness_score,yes,higher_better,0,8,0,8,exclude_outside_valid_range,Working memory accuracy; user-confirmed max 8
+PLANNING_ACC,PLANNING_ACC_PRE,PLANNING_ACC_POST,effectiveness_score,yes,higher_better,0,16,0,16,exclude_outside_valid_range,Planning accuracy; user-confirmed max 16
+PWM_ACC,PWM_ACC_PRE,PWM_ACC_POST,effectiveness_score,yes,higher_better,0,16,0,16,exclude_outside_valid_range,PWM accuracy; user-confirmed max 16
+PLANNING_COMPOSITE,PLANNING_COMPOSITE_PRE,PLANNING_COMPOSITE_POST,effectiveness_score,yes,higher_better,0,100,0,100,exclude_outside_valid_range,"Planning composite; mean of normalized accuracy and inverted tile-extra quality"
+PWM_COMPOSITE,PWM_COMPOSITE_PRE,PWM_COMPOSITE_POST,effectiveness_score,yes,higher_better,0,100,0,100,exclude_outside_valid_range,"PWM composite; mean of normalized accuracy and inverted tile-extra quality"
+planning_tiles_extra,planning_tiles_extra_pre,planning_tiles_extra_post,effectiveness_score,yes,lower_better,0,,0,50,exclude_outside_valid_range,"Tiles over minimum; 0 is best; values below 0 or above 50 are invalid"
+pwm_tiles_extra,pwm_tiles_extra_pre,pwm_tiles_extra_post,effectiveness_score,yes,lower_better,0,,0,50,exclude_outside_valid_range,"Tiles over minimum; 0 is best; values below 0 or above 50 are invalid"
+planning_diff,planning_diff_pre,planning_diff_post,planning_minefield_cleaning,no,lower_better,0,,0,50,exclude_outside_valid_range,"Planning Minefield derived tiles difference; values below 0 or above 50 are invalid"
+pwm_diff,pwm_diff_pre,pwm_diff_post,planning_minefield_cleaning,no,lower_better,0,,0,50,exclude_outside_valid_range,"PWM Minefield derived tiles difference; values below 0 or above 50 are invalid"

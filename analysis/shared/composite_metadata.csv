@@ -1,0 +1,8 @@
+composite,pre_col,post_col,component_1,component_1_direction,component_1_min,component_1_max,component_2,component_2_direction,component_2_min,component_2_max,formula,notes
+PLANNING_COMPOSITE,PLANNING_COMPOSITE_PRE,PLANNING_COMPOSITE_POST,PLANNING_ACC,higher_better,0,16,planning_tiles_extra,lower_better,0,50,"mean((PLANNING_ACC / 16) * 100, ((50 - planning_tiles_extra) / 50) * 100)","Composite performance score, 0-100; requires both accuracy and valid tile-extra difference"
+PWM_COMPOSITE,PWM_COMPOSITE_PRE,PWM_COMPOSITE_POST,PWM_ACC,higher_better,0,16,pwm_tiles_extra,lower_better,0,50,"mean((PWM_ACC / 16) * 100, ((50 - pwm_tiles_extra) / 50) * 100)","Composite performance score, 0-100; requires both accuracy and valid tile-extra difference"
+ABAS_TOT,,,,,,,,,,,"sum available ABAS standard subscales","Generated in memory for descriptive/predictor analyses"
+ABAS_assumed_total,,,,,,,,,,,"sum standard ABAS subscales plus available assumed/supplement columns","Generated in memory for descriptive/predictor analyses"
+BRIEF_TOT,,,,,,,,,,,"sum available BRIEF subscales","Generated in memory for descriptive/predictor analyses"
+planning_tiles_extra,planning_tiles_extra_pre,planning_tiles_extra_post,PLANNING_MATT,lower_better,0,50,PLANNING_MATTI_MIN,reference_minimum,,,"PLANNING_MATT - PLANNING_MATTI_MIN","Valid range 0-50; 0 is optimal"
+pwm_tiles_extra,pwm_tiles_extra_pre,pwm_tiles_extra_post,PWM_MATT,lower_better,0,50,PWM_MATT_MIN,reference_minimum,,,"PWM_MATT - PWM_MATT_MIN","Valid range 0-50; 0 is optimal"
