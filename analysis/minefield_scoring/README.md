@@ -16,10 +16,12 @@ Main output:
 
 - `data/FINAL_DATABASE_RECALCULATED_MINEFIELD.xlsx`
 
-The first sheet contains the original non-Minefield variables plus 17
-recalculated Minefield outcomes for PRE and POST. Historical Minefield columns
-are not copied into the new database, so old and recalculated scores cannot be
-mixed accidentally. The original database is never overwritten.
+The output database keeps the original 104-column schema. Only
+`PLANNING_PERC_PRE`, `PLANNING_PERC_POST`, `PWM_PERC_PRE`, and `PWM_PERC_POST`
+are replaced with recalculated route-efficiency percentages when raw data are
+available. Otherwise their original values are retained. The original database
+is never overwritten, and a cell-level update audit is written to
+`output/minefield_scoring/database_route_efficiency_updates.csv`.
 
 Detailed scoring and selection audits are written to
 `output/minefield_scoring/`.

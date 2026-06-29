@@ -30,12 +30,11 @@ The Corsi Block-Tapping Test (CBT; @monaco2013span; @corsi1972) is used to asses
 The Tower of London (TOL; Shallice, 1982), included in the BVN 5-11 battery (Bisiacchi et al., 2005), assesses planning, problem-solving, and the ability to anticipate consequences. The task uses three pegs of different heights and colored balls. Children must reproduce a target configuration from a standard starting position, following rules: only one ball can be moved at a time, peg capacity cannot be exceeded, and the solution must use the fewest moves possible.
 
 #### Moles Task
-Moles Task is the computerized version Minefield Test for children (Bocchi et al., 2022) adattato con le talpe invece che con le bombe (come negli adulti) measures spatial memory, navigation skills, and visuospatial planning strategies. The Moles Task provides an integrated assessment of spatial working memory and planning, allowing both quantitative and qualitative analysis of navigational skills.  in this task Children interact with an 8x8 grid on a computer screen using a mouse. Rispetto al test originale che include solo un task (pianificazione+woeking memory), il Moles Task includes three tests isolating and combining cognitive components: working memory, planning, and their integration (working memory + planning).
+The Moles Task is a computerized child-friendly task adapted with moles as obstacles. It measures spatial memory, navigation skills, and visuospatial planning strategies. Children interact with an 8 x 8 grid on a computer screen using a mouse. The task includes three conditions designed to isolate and combine cognitive components: working memory, planning, and their integration (working memory plus planning).
 
-- In the working memory task children view a number of “moles” for 10 seconds, followed by a 5-second retention interval. They must recall and click the exact positions of the moles. Difficulty increases from 2 to 8 items.
+- In the working memory task children view a number of "moles" for 10 seconds, followed by a 5-second retention interval. They must recall and click the exact positions of the moles. Difficulty increases from 2 to 8 items.
 - In the planning test, children must trace the shortest path from start to finish, avoiding visible obstacles (moles). Difficulty increases with more obstacles.
 - In the combined test, obstacles disappear after 10 seconds, requiring children to remember their locations and plan the shortest path accordingly.
-
 
 #### Teacher Questionnaires
 The ABAS-II (Adaptive Behavior Assessment System, Second Edition; @harrison2003; @ferri2014) is a comprehensive measure of adaptive functioning from early childhood to adulthood. The Italian version of the ABAS-II Parent Form (5–21 years; Ferri et al., 2014) consists of 232 items, each rated on a scale from 0 (not able) to 3 (always/almost always). The parental form includes 10 skill areas—Communication, Community Use, Functional Academics, Home Living, Health and Safety, Leisure, Self-Care, Self-Direction, Social, and Work (the latter only for individuals aged 17 or older). These areas are combined to form three composite indices: Conceptual (CON; Communication, Functional Academics, Self-Direction), Social (SOC; Leisure, Social), and Practical (PRAC; Self-Care, Home Living, Community Use, Health and Safety), as well as an overall General Adaptive Composite (GAC).  The Teacher Form was used to obtain ecological evaluations of children’s adaptive skills in the school context, providing standardized scores for individual domains and composite indices, including the GAC. For details about the psychometric properties of the Italian version, see Ferri et al. (2014). The BRIEF-2 (Behavior Rating Inventory of Executive Function, Second Edition; @gioia2015) is a revised questionnaire for the assessment of executive functions in daily life, developed to address some limitations of the original BRIEF. The BRIEF-2 includes nine clinical scales (Inhibit, Self-Monitor, Shift, Emotional Control, Initiate, Working Memory, Plan/Organize, Task-Monitor, Organization of Materials) and three composite indexes: BRI (Inhibit, Self-Monitor), ERI (Emotional Control, Shift), and CRI (Initiate, Working Memory, Plan/Organize, Task-Monitor, Organization of Materials). Items are rated on a 3-point scale (never, sometimes, always). The Teacher Form was standardized on a large sample of students aged 5 to 18 years, and confirmatory factor analyses supported a three-index model with strong internal reliability (coefficients: BRI = .95, ERI = .94, CRI = .98). The BRIEF-2 is widely used in both clinical and research settings to provide a comprehensive profile of executive functioning in children and adolescents.
@@ -58,12 +57,102 @@ The next phase focuses on the Knight, emphasizing its unique “L-shaped” move
 
 # Results
 
-Statistical analyses were performed using Jamovi 2.7.18. Preliminary analyses included checking the assumptions of normality, homoscedasticity, and independence of the data. For inferential analyses, paired and unpaired t-tests, repeated measures ANOVA, and linear mixed models (LMM) were used to evaluate main effects and interactions between group and time. Results were corrected for type I error control using the Bonferroni method.
+Statistical analyses were performed using a reproducible Python pipeline. Preliminary analyses used independent-samples Welch t-tests to screen PRE scores for differences by sex and age. Training effects were then evaluated with age-adjusted ANCOVA models, with POST scores modeled as a function of the corresponding PRE score, group, and age. Robust HC3 standard errors were used for the ANCOVA models, and multiple comparisons were controlled with the Benjamini-Hochberg false-discovery-rate (FDR) procedure.
 
-## Improvement of cognitive abilities
+Time-based outcomes were logarithmically transformed before analysis to improve their suitability for linear models.
+
+## Training's Effect on Cognitive Abilities
+
+Before testing the effect of training, PRE scores were screened for possible demographic differences using Welch independent-samples t-tests. Sex differences were tested by comparing boys and girls on each PRE outcome. Age differences were tested with pairwise comparisons among the three age groups (5 vs. 6, 5 vs. 7, and 6 vs. 7 years). No sex-related difference survived FDR correction. Age-related differences survived FDR correction for seven PRE outcomes: log-transformed Planning execution time, log-transformed Planning total time, Raven accuracy, Tower of London rule violations, Moles Task working-memory accuracy, Moles Task working-memory span, and Moles Task working-memory trials. The significant age comparisons are summarized below.
+
+| PRE outcome | Significant age comparison | Younger group M | Older group M | FDR q |
+|---|---|---:|---:|---:|
+| PLANNING_TR_LN | 7 vs. 6 | 5.80 | 5.27 | < .001 |
+| PLANNING_TE_LN | 7 vs. 6 | 5.57 | 5.04 | < .001 |
+| Raven_ACC | 7 vs. 6 | 19.00 | 22.83 | .005 |
+| WM_TRIAL | 7 vs. 5 | 3.00 | 4.54 | .011 |
+| TOL_VIO_REG | 7 vs. 5 | 5.00 | 2.38 | .011 |
+| WM_SPAN | 7 vs. 5 | 1.89 | 2.94 | .011 |
+| WM_TRIAL | 7 vs. 6 | 3.51 | 4.54 | .020 |
+| WM_SPAN | 7 vs. 6 | 2.14 | 2.94 | .021 |
+| WM_ACC | 7 vs. 6 | 1.35 | 2.44 | .032 |
+
+Because PRE performance differed by age, the pre-post training comparison was adjusted for age only. For each outcome, the ANCOVA model was `POST ~ PRE + group + age`; the group coefficient tested whether the experimental group improved more than the control group from T0 to T1 after accounting for baseline performance and age. Across the 45 PRE-POST outcomes tested, no group effect survived FDR correction in the age-adjusted models. The smallest adjusted q value was .260; this corresponded to Moles Task working-memory accuracy, which was nominally significant before correction (group beta = 0.85, 95% CI [0.25, 1.45], p = .006) but not significant after FDR correction. Thus, the analysis did not provide FDR-corrected evidence that the experimental group improved more than the control group between T0 and T1.
+
 ## Relationship between autonomy and executive functions
+
+To examine whether adaptive functioning and everyday executive functioning were associated with cognitive change, we tested whether ABAS-II and BRIEF-2 scores predicted individual treatment effectiveness across the cognitive outcomes. Predictor models were adjusted for age, and p values were corrected using the Benjamini-Hochberg FDR procedure. One ABAS-II scale survived FDR correction: higher supplemental Health and Safety scores predicted greater Tower of London accuracy effectiveness.
+
+At the exploratory uncorrected threshold, additional ABAS-II and BRIEF-2 scales were associated with treatment effectiveness in specific outcomes. These nominal associations are summarized below and should be interpreted cautiously when the FDR-corrected q value is above .05.
+
+| Predictor | Outcome | beta | 95% CI | p | FDR q |
+|---|---|---:|---|---:|---:|
+| ABAS_Health_saf_suppongo | Tower of London accuracy effectiveness | 15.30 | [7.83, 22.77] | < .001 | .005 |
+| BRIEF_Em_Con | Planning-working-memory route-efficiency effectiveness | 28.35 | [9.54, 47.15] | .003 | .105 |
+| ABAS_school_liv_suppongo | Tower of London accuracy effectiveness | 15.72 | [4.93, 26.51] | .004 | .136 |
+| ABAS_Health_saf_sic | Raven accuracy effectiveness | -7.49 | [-12.79, -2.18] | .006 | .165 |
+| ABAS_fun_acc | Planning composite effectiveness | 43.16 | [9.89, 76.43] | .011 | .241 |
+| ABAS_comm_use | Planning composite effectiveness | 31.44 | [5.59, 57.29] | .017 | .320 |
+| ABAS_Leisure | Planning-working-memory composite effectiveness | 10.42 | [1.28, 19.56] | .025 | .409 |
+| BRIEF_ERI | Planning-working-memory route-efficiency effectiveness | 20.24 | [2.46, 38.03] | .026 | .409 |
+| ABAS_Leisure | Planning-working-memory accuracy effectiveness | 11.30 | [1.16, 21.44] | .029 | .409 |
+| ABAS_school_liv_suppongo | Raven accuracy effectiveness | 13.74 | [0.70, 26.77] | .039 | .476 |
+
 ## Navigational planning skills in the 5-7 age group
 
+To describe baseline navigational planning abilities in the full analytic sample, PRE Moles Task performance was summarized separately for 5-, 6-, and 7-year-old children. The age distribution was unbalanced but covered the intended developmental range, with 9 children aged 5 years, 40 aged 6 years, and 52 aged 7 years. Means and standard deviations are reported in the table below.
+
+| Moles Task PRE outcome | Age 5 M (SD) | Age 6 M (SD) | Age 7 M (SD) |
+|---|---:|---:|---:|
+| Working memory span | 1.89 (0.60) | 2.14 (1.11) | 2.94 (1.13) |
+| Working memory trials | 3.00 (0.87) | 3.51 (1.39) | 4.54 (1.43) |
+| Working memory accuracy | 1.22 (1.30) | 1.35 (1.67) | 2.44 (1.49) |
+| Planning trials | 8.56 (2.55) | 8.30 (0.88) | 8.16 (0.42) |
+| Planning accuracy | 13.67 (4.15) | 15.54 (1.26) | 15.42 (1.73) |
+| Planning optimal-step trials | 1.22 (1.48) | 0.38 (1.04) | 0.52 (1.62) |
+| Planning tiles used | 69.89 (20.91) | 74.30 (12.83) | 66.76 (15.13) |
+| Planning minimum tiles | 56.22 (16.98) | 60.08 (3.95) | 58.56 (10.82) |
+| Planning route efficiency (%) | 85.05 (10.12) | 86.09 (9.94) | 91.01 (8.46) |
+| Planning composite | 85.23 (12.49) | 91.38 (5.88) | 93.60 (6.54) |
+| Working-memory-planning trials | 4.78 (1.56) | 5.05 (1.99) | 5.76 (2.19) |
+| Working-memory-planning accuracy | 3.89 (2.32) | 4.57 (2.69) | 5.44 (2.68) |
+| Working-memory-planning optimal-step trials | 2.56 (0.73) | 2.51 (0.65) | 2.84 (1.11) |
+| Working-memory-planning tiles used | 22.67 (12.13) | 24.84 (16.12) | 30.18 (16.77) |
+| Working-memory-planning minimum tiles | 19.78 (10.80) | 23.59 (13.96) | 26.60 (14.73) |
+| Working-memory-planning route efficiency (%) | 87.69 (10.19) | 95.78 (34.27) | 90.13 (9.36) |
+| Working-memory-planning composite | 56.00 (10.31) | 59.38 (10.40) | 62.04 (10.22) |
+
+As an exploratory validation check, we examined whether PRE Moles Task performance was associated with other PRE cognitive measures and teacher-questionnaire scores. Spearman correlations were used because several task indices were bounded or non-normally distributed. P values were corrected with the Benjamini-Hochberg FDR procedure across the exploratory correlation set. The table reports the strongest FDR-significant associations (absolute rho >= .35).
+
+| Moles Task PRE outcome | PRE correlate | n | Spearman rho | p | FDR q |
+|---|---|---:|---:|---:|---:|
+| Planning log execution time | ABAS_comm_use | 92 | -0.53 | < .001 | < .001 |
+| Planning log execution time | Raven_ACC_PRE | 95 | -0.51 | < .001 | < .001 |
+| Planning log total time | ABAS_comm_use | 93 | -0.50 | < .001 | < .001 |
+| Planning log total time | Raven_ACC_PRE | 96 | -0.50 | < .001 | < .001 |
+| Planning accuracy | BRIEF_Inhibit | 93 | -0.48 | < .001 | < .001 |
+| Working memory accuracy | Raven_ACC_PRE | 96 | 0.48 | < .001 | < .001 |
+| Planning optimal-step trials | BRIEF_Inhibit | 93 | 0.48 | < .001 | < .001 |
+| Planning accuracy | BRIEF_wm | 93 | -0.46 | < .001 | < .001 |
+| Planning log execution time | ABAS_fun_acc | 92 | -0.46 | < .001 | < .001 |
+| Planning log total time | ABAS_fun_acc | 93 | -0.45 | < .001 | < .001 |
+| Planning optimal-step trials | BRIEF_wm | 93 | 0.45 | < .001 | < .001 |
+| Planning log total time | age | 96 | -0.45 | < .001 | < .001 |
+| Planning log execution time | age | 95 | -0.44 | < .001 | < .001 |
+| Working memory accuracy | CBT_B_SPAN_PRE | 96 | 0.43 | < .001 | < .001 |
+| Working memory accuracy | ABAS_comm_use | 93 | 0.42 | < .001 | .001 |
+| Planning log execution time | CBT_F_SPAN_PRE | 95 | -0.42 | < .001 | .001 |
+| Planning log execution time | CBT_B_SPAN_PRE | 95 | -0.42 | < .001 | .001 |
+| Working memory span | age | 96 | 0.41 | < .001 | .002 |
+| Planning log total time | CBT_F_SPAN_PRE | 96 | -0.41 | < .001 | .002 |
+| Planning optimal-step trials | BRIEF_SelfMonitor | 93 | 0.41 | < .001 | .003 |
+| Planning accuracy | BRIEF_SelfMonitor | 93 | -0.40 | < .001 | .003 |
+| Planning accuracy | BRIEF_BRI | 93 | -0.40 | < .001 | .003 |
+| Working memory trials | age | 96 | 0.40 | < .001 | .003 |
+| Planning optimal-step trials | BRIEF_BRI | 93 | 0.40 | < .001 | .003 |
+| Working memory span | CBT_B_SPAN_PRE | 96 | 0.40 | < .001 | .003 |
+
+Overall, baseline Moles Task scores showed the expected developmental pattern: older children tended to achieve higher working-memory scores and faster planning performance. The strongest convergent associations linked Moles Task working-memory outcomes with Raven accuracy and Corsi backward span, and linked planning speed with Raven accuracy and adaptive communication/functional-academic ratings. Higher teacher-rated everyday executive difficulties on the BRIEF-2 were associated with lower planning accuracy and more non-optimal planning trials. These results support the interpretation that Moles Task performance reflects a combination of visuospatial working memory, non-verbal reasoning, everyday executive functioning, and age-related maturation.
 
 # Discussion
 

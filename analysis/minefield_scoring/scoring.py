@@ -1071,7 +1071,7 @@ def load_official_database_records() -> tuple[list[str], list[dict]]:
     if not values:
         raise ValueError(f"Empty official database: {rel(OFFICIAL_DATABASE)}")
 
-    headers = [clean(value) for value in values[0]]
+    headers = [str(value) if value is not None else "" for value in values[0]]
     if len(headers) != len(set(headers)):
         raise ValueError("The official database contains duplicate column names")
     if "ID" not in headers:
@@ -1415,43 +1415,125 @@ def database_score_field(score_field: str, occasion: str) -> str:
     return f"MF_{score_field.upper()}_{occasion}"
 
 
+def database_best_available_field(score_field: str, occasion: str) -> str:
+    return f"MF_BEST_AVAILABLE_{score_field.upper()}_{occasion}"
+
+
+HISTORICAL_FALLBACK_COLUMNS = {
+    "span_wm": {"PRE": "WM_SPAN_PRE", "POST": "WM_SPAN_POST"},
+    "accuracy_wm": {"PRE": "WM_ACC_PRE", "POST": "WM_ACC_POST"},
+    "span_planning": {"PRE": "PLANNING_SPAN_PRE", "POST": "PLANNING_SPAN_POST"},
+    "accuracy_planning": {"PRE": "PLANNING_ACC_PRE", "POST": "PLANNING_ACC_POST"},
+    "route_efficiency_pct_planning": {"PRE": "PLANNING_PERC_PRE", "POST": "PLANNING_PERC_POST"},
+    "planning_mean_total_time": {"PRE": "PLANNING_TR_PRE", "POST": "PLANNING_TOT_POST"},
+    "planning_mean_planning_time": {"PRE": "PLANNING_TP_PRE", "POST": "PLANNING_TP_POST"},
+    "planning_mean_execution_time": {"PRE": "PLANNING_TE_PRE", "POST": "PLANNING_TE_POST"},
+    "accuracy_wmplanning": {"PRE": "PWM_ACC_PRE", "POST": "PWM_ACC_POST"},
+    "route_efficiency_pct_wmplanning": {"PRE": "PWM_PERC_PRE", "POST": "PWM_PERC_POST"},
+    "wmplanning_mean_total_time": {"PRE": "PWM_TR_PRE", "POST": "PWM_T_POST"},
+    "wmplanning_mean_planning_time": {"PRE": "PWM_TP_PRE", "POST": "PWM_TP_POST"},
+    "wmplanning_mean_execution_time": {"PRE": "PWM_TE_PRE", "POST": "PWM_TE_POST"},
+}
+
+PROVENANCE_FIELDS = [
+    "participant_id",
+    "occasion",
+    "score_field",
+    "database_column",
+    "source",
+    "historical_source_column",
+    "value",
+]
+
+
+def normalized_header(value: str) -> str:
+    return re.sub(r"\s+", "", clean(value).upper())
+
+
 def complete_database_rows(
     original_headers: list[str],
     original_records: list[dict],
     long_rows: list[dict],
-) -> tuple[list[str], list[dict], list[str]]:
-    retained_headers = [
-        header
-        for header in original_headers
-        if not is_legacy_minefield_column(header)
-    ]
+) -> tuple[list[str], list[dict], list[dict], list[dict]]:
     score_headers = [
         database_score_field(field, occasion)
         for occasion in PROJECT_OCCASIONS
         for field in SCORE_FIELDS[1:]
     ]
-    output_headers = [*retained_headers, *score_headers]
-    score_index = {
+    output_headers = [*original_headers, *score_headers]
+    original_header_lookup = {
+        normalized_header(header): header for header in original_headers
+    }
+    original_by_id = {record["ID"]: record for record in original_records}
+
+    complete_long_rows = []
+    provenance_rows = []
+    for raw_row in long_rows:
+        row = dict(raw_row)
+        participant_id = row["participant_id"]
+        occasion = row["occasion"]
+        historical_record = original_by_id[participant_id]
+        for field in SCORE_FIELDS[1:]:
+            value = row.get(field, "")
+            source = "recalculated_raw" if value not in {None, ""} else "missing"
+            historical_source_column = ""
+            fallback_name = HISTORICAL_FALLBACK_COLUMNS.get(field, {}).get(occasion)
+            if fallback_name:
+                actual_header = original_header_lookup.get(normalized_header(fallback_name))
+                if actual_header:
+                    historical_source_column = actual_header
+                    historical_value = historical_record.get(actual_header)
+                    if value in {None, ""} and historical_value not in {None, ""}:
+                        value = historical_value
+                        row[field] = value
+                        source = "historical_fallback"
+            provenance_rows.append(
+                {
+                    "participant_id": participant_id,
+                    "occasion": occasion,
+                    "score_field": field,
+                    "database_column": database_best_available_field(field, occasion),
+                    "source": source,
+                    "historical_source_column": historical_source_column,
+                    "value": value,
+                }
+            )
+        complete_long_rows.append(row)
+
+    complete_score_index = {
+        (row["participant_id"], row["occasion"]): row
+        for row in complete_long_rows
+    }
+    raw_score_index = {
         (row["participant_id"], row["occasion"]): row
         for row in long_rows
     }
+    best_available_headers = [
+        database_best_available_field(field, occasion)
+        for occasion in PROJECT_OCCASIONS
+        for field in SCORE_FIELDS[1:]
+    ]
+    output_headers = [*original_headers, *score_headers, *best_available_headers]
 
     output_rows = []
     for record in original_records:
         participant_id = record["ID"]
-        output = {header: record.get(header) for header in retained_headers}
+        output = {header: record.get(header) for header in original_headers}
         for occasion in PROJECT_OCCASIONS:
-            score_row = score_index[(participant_id, occasion)]
+            raw_score_row = raw_score_index[(participant_id, occasion)]
+            complete_score_row = complete_score_index[(participant_id, occasion)]
             for field in SCORE_FIELDS[1:]:
-                output[database_score_field(field, occasion)] = score_row[field]
+                output[database_score_field(field, occasion)] = raw_score_row[field]
+                output[database_best_available_field(field, occasion)] = complete_score_row[field]
         output_rows.append(output)
-    return output_headers, output_rows, retained_headers
+    return output_headers, output_rows, complete_long_rows, provenance_rows
 
 
 def method_rows(
     original_headers: list[str],
-    retained_headers: list[str],
+    provenance_rows: list[dict],
 ) -> list[dict]:
+    source_counts = Counter(row["source"] for row in provenance_rows)
     return [
         {"item": "source_database", "value": rel(OFFICIAL_DATABASE)},
         {"item": "raw_directory", "value": rel(RAW_DIR)},
@@ -1471,11 +1553,23 @@ def method_rows(
         },
         {
             "item": "historical_minefield_columns",
-            "value": f"{len(original_headers) - len(retained_headers)} removed and replaced by 34 recalculated PRE/POST fields",
+            "value": "all 48 historical Minefield columns retained unchanged alongside 34 recalculated PRE/POST fields",
         },
         {
-            "item": "other_neuropsychological_columns",
-            "value": f"{len(retained_headers)} retained from the source database",
+            "item": "fallback_policy",
+            "value": "MF_ columns remain recalculated-only; MF_BEST_AVAILABLE_ columns use the historically equivalent value when recalculation is blank",
+        },
+        {
+            "item": "recalculated_raw_values",
+            "value": source_counts["recalculated_raw"],
+        },
+        {
+            "item": "historical_fallback_values",
+            "value": source_counts["historical_fallback"],
+        },
+        {
+            "item": "values_still_missing",
+            "value": source_counts["missing"],
         },
         {
             "item": "formula_policy",
@@ -1555,9 +1649,11 @@ def write_complete_database(
     path: Path,
     output_headers: list[str],
     output_rows: list[dict],
-    long_rows: list[dict],
+    raw_long_rows: list[dict],
+    complete_long_rows: list[dict],
     coverage_rows: list[dict],
     methods: list[dict],
+    provenance_rows: list[dict],
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     workbook = Workbook()
@@ -1570,8 +1666,20 @@ def write_complete_database(
     write_table_sheet(
         workbook,
         "minefield_scores_long",
-        long_rows,
+        raw_long_rows,
         LONG_SCORE_FIELDS,
+    )
+    write_table_sheet(
+        workbook,
+        "minefield_best_available",
+        complete_long_rows,
+        LONG_SCORE_FIELDS,
+    )
+    write_table_sheet(
+        workbook,
+        "minefield_provenance",
+        provenance_rows,
+        PROVENANCE_FIELDS,
     )
     write_table_sheet(
         workbook,
@@ -1590,9 +1698,9 @@ def write_complete_database(
 
 def validate_complete_database(
     original_records: list[dict],
-    retained_headers: list[str],
+    original_headers: list[str],
     output_headers: list[str],
-    coverage_rows: list[dict],
+    provenance_rows: list[dict],
 ) -> None:
     workbook = load_workbook(COMPLETE_DATABASE, read_only=True, data_only=True)
     sheet = workbook["complete_database"]
@@ -1613,32 +1721,45 @@ def validate_complete_database(
         output = output_by_id.get(original["ID"])
         if output is None:
             raise ValueError(f"Participant lost from complete database: {original['ID']}")
-        for header in retained_headers:
+        for header in original_headers:
             if output.get(header) != original.get(header):
                 raise ValueError(
-                    f"Non-Minefield value changed: {original['ID']} / {header}"
+                    f"Historical database value changed: {original['ID']} / {header}"
                 )
 
-    if any(is_legacy_minefield_column(header) for header in headers):
-        raise ValueError("Historical Minefield columns remain in the new database")
-
     score_headers = [
-        header for header in headers if header.startswith("MF_")
+        header
+        for header in headers
+        if header.startswith("MF_")
+        and not header.startswith("MF_BEST_AVAILABLE_")
     ]
     if len(score_headers) != 34:
         raise ValueError(f"Expected 34 Minefield PRE/POST fields, found {len(score_headers)}")
+    best_available_headers = [
+        header for header in headers if header.startswith("MF_BEST_AVAILABLE_")
+    ]
+    if len(best_available_headers) != 34:
+        raise ValueError(
+            f"Expected 34 best-available Minefield fields, found {len(best_available_headers)}"
+        )
 
-    missing_ids = {
-        row["participant_id"]
-        for row in coverage_rows
-        if row["status"] == "missing_raw"
+    if len(provenance_rows) != len(original_records) * 2 * len(SCORE_FIELDS[1:]):
+        raise ValueError("Minefield provenance row count is incomplete")
+    provenance_index = {
+        (row["participant_id"], row["database_column"]): row
+        for row in provenance_rows
     }
-    for participant_id in missing_ids:
-        output = output_by_id[participant_id]
-        if any(output.get(header) not in {None, ""} for header in score_headers):
-            raise ValueError(
-                f"Missing participant has nonblank Minefield data: {participant_id}"
-            )
+    for participant_id, output in output_by_id.items():
+        for header in best_available_headers:
+            provenance = provenance_index[(participant_id, header)]
+            output_value = output.get(header)
+            provenance_value = provenance.get("value")
+            if output_value in {None, ""} and provenance_value in {None, ""}:
+                continue
+            if output_value != provenance_value:
+                raise ValueError(
+                    f"Minefield provenance mismatch: {participant_id} / {header}"
+                )
 
 
 def write_project_summary(
@@ -1648,7 +1769,7 @@ def write_project_summary(
     audit_rows: list[dict],
     coverage_rows: list[dict],
     original_headers: list[str],
-    retained_headers: list[str],
+    provenance_rows: list[dict],
 ) -> None:
     coverage_counts = Counter(row["status"] for row in coverage_rows)
     missing_ids = [
@@ -1660,6 +1781,7 @@ def write_project_summary(
         row["exclusion_reason"] == "negative_efficency"
         for row in audit_rows
     )
+    source_counts = Counter(row["source"] for row in provenance_rows)
     lines = [
         "# Chess project Minefield recalculation",
         "",
@@ -1671,7 +1793,7 @@ def write_project_summary(
         "- Repeated sessions on the same date were resolved by completeness, then recency.",
         "- The earliest assessment date is PRE and the latest is POST.",
         "- The source `FINAL_DATABASE.xlsx` was not modified.",
-        "- Historical Minefield columns were removed from the new database and replaced by the 17 recalculated outcomes at PRE and POST.",
+        "- All historical columns are retained unchanged; `MF_` columns remain recalculated-only and `MF_BEST_AVAILABLE_` columns add historical fallback values.",
         "",
         "## Counts",
         "",
@@ -1688,8 +1810,12 @@ def write_project_summary(
         f"- Negative path-efficiency rows excluded: {negative_efficiency_rows}",
         f"- Long score rows: {len(long_rows)} (101 participants x PRE/POST)",
         f"- Original database columns: {len(original_headers)}",
-        f"- Non-Minefield columns retained: {len(retained_headers)}",
+        f"- Original database columns retained: {len(original_headers)}",
         "- Recalculated Minefield columns added: 34",
+        "- Best-available Minefield columns added: 34",
+        f"- Recalculated raw values: {source_counts['recalculated_raw']}",
+        f"- Historical fallback values: {source_counts['historical_fallback']}",
+        f"- Values still missing: {source_counts['missing']}",
         "",
         "## ID coverage",
         "",
@@ -1714,6 +1840,157 @@ def write_project_summary(
     )
 
 
+EFFICIENCY_DATABASE_COLUMNS = {
+    ("PRE", "route_efficiency_pct_planning"): "PLANNING_PERC_PRE",
+    ("POST", "route_efficiency_pct_planning"): "PLANNING_PERC_POST",
+    ("PRE", "route_efficiency_pct_wmplanning"): "PWM_PERC_PRE",
+    ("POST", "route_efficiency_pct_wmplanning"): "PWM_PERC_POST",
+}
+EFFICIENCY_UPDATE_FIELDS = [
+    "participant_id",
+    "occasion",
+    "score_field",
+    "database_column",
+    "source",
+    "original_value",
+    "output_value",
+]
+
+
+def build_efficiency_only_database(
+    original_headers: list[str],
+    original_records: list[dict],
+    long_rows: list[dict],
+) -> tuple[list[dict], list[dict]]:
+    header_lookup = {
+        normalized_header(header): header for header in original_headers
+    }
+    score_index = {
+        (row["participant_id"], row["occasion"]): row
+        for row in long_rows
+    }
+    output_rows = []
+    update_rows = []
+    for original in original_records:
+        participant_id = original["ID"]
+        output = dict(original)
+        for (occasion, score_field), requested_header in EFFICIENCY_DATABASE_COLUMNS.items():
+            actual_header = header_lookup.get(normalized_header(requested_header))
+            if actual_header is None:
+                raise KeyError(f"Historical route-efficiency column not found: {requested_header}")
+            original_value = original.get(actual_header)
+            recalculated_value = score_index[(participant_id, occasion)].get(score_field, "")
+            if recalculated_value in {None, ""}:
+                output_value = original_value
+                source = "historical_original"
+            else:
+                output_value = recalculated_value
+                source = "recalculated_raw"
+            output[actual_header] = output_value
+            update_rows.append(
+                {
+                    "participant_id": participant_id,
+                    "occasion": occasion,
+                    "score_field": score_field,
+                    "database_column": actual_header,
+                    "source": source,
+                    "original_value": original_value,
+                    "output_value": output_value,
+                }
+            )
+        output_rows.append(output)
+    return output_rows, update_rows
+
+
+def write_efficiency_only_database(
+    path: Path,
+    headers: list[str],
+    rows: list[dict],
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    workbook = Workbook()
+    write_table_sheet(workbook, "Foglio1", rows, headers)
+    workbook.save(path)
+
+
+def validate_efficiency_only_database(
+    original_headers: list[str],
+    original_records: list[dict],
+    update_rows: list[dict],
+) -> None:
+    workbook = load_workbook(COMPLETE_DATABASE, read_only=True, data_only=True)
+    if workbook.sheetnames != ["Foglio1"]:
+        raise ValueError(f"Unexpected recalculated database sheets: {workbook.sheetnames}")
+    sheet = workbook["Foglio1"]
+    values = list(sheet.iter_rows(values_only=True))
+    workbook.close()
+    headers = [str(value) if value is not None else "" for value in values[0]]
+    if headers != original_headers:
+        raise ValueError("Recalculated database columns differ from the original database")
+    output_records = [dict(zip(headers, row)) for row in values[1:]]
+    output_by_id = {row["ID"]: row for row in output_records}
+    original_by_id = {row["ID"]: row for row in original_records}
+    if len(output_records) != len(original_records) or len(output_by_id) != len(output_records):
+        raise ValueError("Participant rows changed in the recalculated database")
+
+    target_columns = {row["database_column"] for row in update_rows}
+    for participant_id, original in original_by_id.items():
+        output = output_by_id[participant_id]
+        for header in original_headers:
+            if header in target_columns:
+                continue
+            if output.get(header) != original.get(header):
+                raise ValueError(
+                    f"Non-efficiency value changed: {participant_id} / {header}"
+                )
+
+    update_index = {
+        (row["participant_id"], row["database_column"]): row
+        for row in update_rows
+    }
+    for participant_id, output in output_by_id.items():
+        for column in target_columns:
+            expected = update_index[(participant_id, column)]["output_value"]
+            actual = output.get(column)
+            if actual != expected:
+                raise ValueError(
+                    f"Route-efficiency update mismatch: {participant_id} / {column}"
+                )
+
+
+def write_efficiency_only_summary(
+    counters: Counter,
+    configurations: dict[str, TrialConfiguration],
+    audit_rows: list[dict],
+    update_rows: list[dict],
+) -> None:
+    sources = Counter(row["source"] for row in update_rows)
+    lines = [
+        "# Chess project route-efficiency recalculation",
+        "",
+        "- The output database retains the original 104-column schema and 101 participant rows.",
+        "- Only `PLANNING_PERC_PRE`, `PLANNING_PERC_POST`, `PWM_PERC_PRE`, and `PWM_PERC_POST` may change.",
+        "- Recalculated route efficiency is used when raw data are available; otherwise the original value is retained.",
+        "- `PLANNING_EFF_*` and `PWM_EFF_*` remain unchanged because they are tile-difference measures.",
+        "",
+        "## Counts",
+        "",
+        f"- Configurations: {len(configurations)}",
+        f"- Trial audit rows: {len(audit_rows)}",
+        f"- Efficiency cells considered: {len(update_rows)}",
+        f"- Recalculated cells used: {sources['recalculated_raw']}",
+        f"- Original cells retained: {sources['historical_original']}",
+        "",
+        "## Outputs",
+        "",
+        f"- `{rel(COMPLETE_DATABASE)}`",
+        f"- `{rel(OUTPUT_DIR / 'database_route_efficiency_updates.csv')}`",
+        f"- `{rel(OUTPUT_DIR / 'minefield_scoring.xlsx')}`",
+    ]
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    (OUTPUT_DIR / "summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main() -> None:
     configurations = load_configurations()
     raw_trials, counters = load_raw_trials(configurations)
@@ -1735,7 +2012,7 @@ def main() -> None:
         counters,
     )
     coverage_rows = build_coverage_rows(official_order, selected_sessions)
-    output_headers, output_rows, retained_headers = complete_database_rows(
+    output_rows, efficiency_update_rows = build_efficiency_only_database(
         original_headers,
         original_records,
         long_rows,
@@ -1755,29 +2032,26 @@ def main() -> None:
         coverage_rows,
         issue_rows,
     )
-    methods = method_rows(original_headers, retained_headers)
-    write_complete_database(
+    write_efficiency_only_database(
         COMPLETE_DATABASE,
-        output_headers,
+        original_headers,
         output_rows,
-        long_rows,
-        coverage_rows,
-        methods,
     )
-    validate_complete_database(
+    write_csv(
+        OUTPUT_DIR / "database_route_efficiency_updates.csv",
+        efficiency_update_rows,
+        EFFICIENCY_UPDATE_FIELDS,
+    )
+    validate_efficiency_only_database(
+        original_headers,
         original_records,
-        retained_headers,
-        output_headers,
-        coverage_rows,
+        efficiency_update_rows,
     )
-    write_project_summary(
+    write_efficiency_only_summary(
         counters,
         configurations,
-        long_rows,
         audit_rows,
-        coverage_rows,
-        original_headers,
-        retained_headers,
+        efficiency_update_rows,
     )
 
     print(
