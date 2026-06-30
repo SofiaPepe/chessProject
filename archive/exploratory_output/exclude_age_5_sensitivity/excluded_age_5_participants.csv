@@ -1,0 +1,10 @@
+ID,group,group_label,sex,age,semestre,Raven_ACC_PRE,CBT_F_SPAN_PRE,CBT_B_SPAN_PRE
+GC03,1,experimental,M,5,1,10,0,0
+GC04,1,experimental,F,5,1,16,3,0
+GC05,1,experimental,M,5,1,25,4,4
+GC06,1,experimental,F,5,1,18,3,0
+GC07,1,experimental,M,5,1,17,4,0
+GC08,1,experimental,F,5,1,23,5,4
+GC09,1,experimental,M,5,1,14,0,0
+GC10,1,experimental,M,5,1,13,3,0
+GC11,1,experimental,F,5,1,11,3,0

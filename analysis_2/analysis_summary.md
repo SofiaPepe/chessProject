@@ -11,11 +11,12 @@
 
 - PRE/POST variables tested: 45
 - Group x time interactions significant after FDR: 0
-- Covariate-adjusted group effects significant after FDR: 0
-- PRE outcomes associated with age after FDR: 8
-- PRE outcomes differing by sex after FDR: 0
+- Age-adjusted group x time interactions significant after FDR: 0
+- Baseline/PRE measures associated with age after FDR: 20
+- Baseline/PRE measures differing by sex after FDR: 0
 - Effectiveness outcomes: 11
 - Effectiveness group comparisons significant after FDR: 0
+- PRE outcomes predicted by ABAS/BRIEF after FDR: 24
 - Predictor main effects significant after FDR: 17
 - Predictor moderation effects significant after FDR: 0
 - PCA domains completed: 3
@@ -24,8 +25,8 @@
 
 ## Method notes
 
-- Primary unadjusted training test: HC3 OLS comparison of PRE-to-POST change between groups, equivalent to the group x time interaction with two occasions.
-- Adjusted sensitivity model: ANCOVA of POST on PRE, group, and age with HC3 standard errors.
+- Primary training test: linear model on PRE/POST scores with time, group, time x group, and age; standard errors are clustered by participant.
+- The time x group term tests whether PRE-to-POST change differs between experimental and control groups after adjusting for age.
 - Multiple testing: Benjamini-Hochberg FDR within each result family.
 - Minefield composites combine original accuracy with recalculated route-efficiency percentage.
 - Effectiveness is calculated only for outcomes with confirmed theoretical bounds.
@@ -33,6 +34,6 @@
 
 ## Reproducibility
 
-- Runtime: 23.8 seconds
+- Runtime: 48.2 seconds
 - Run command: `python analysis_2/run_all.py`
 - Detailed workbooks and plots are under `analysis_2/output/`.

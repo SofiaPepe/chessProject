@@ -1,0 +1,46 @@
+variable,status,n_obs,n_ids,interaction_beta,interaction_se,interaction_ci_low,interaction_ci_high,interaction_p_raw,aic,converged
+CBT_B_SPAN,LinAlgError: Singular matrix,,,,,,,,,
+CBT_F_SPAN,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_ACC,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_COMPOSITE,,197.0,101.0,-1.6822999303777393,2.0710479259182755,-5.741479275433937,2.376879414678459,0.41662291754742875,1366.5930342166948,True
+PLANNING_EFF,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_MATT,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_MATTI_MIN,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_OST,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_PERC,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_SPAN,,197.0,101.0,-0.001614119509681932,0.2000477287649966,-0.3937004630781127,0.3904722240587488,0.9935622010312267,429.0398689873434,True
+PLANNING_TE,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_TE_LN,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_TP,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_TP_LN,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_TR,,197.0,101.0,3.9997285593603573,24.210766616752114,-43.45250204757844,51.451959166299154,0.8687829920491332,2425.465568744918,True
+PLANNING_TRIAL,LinAlgError: Singular matrix,,,,,,,,,
+PLANNING_TR_LN,LinAlgError: Singular matrix,,,,,,,,,
+PWM_ACC,LinAlgError: Singular matrix,,,,,,,,,
+PWM_COMPOSITE,LinAlgError: Singular matrix,,,,,,,,,
+PWM_EFF,LinAlgError: Singular matrix,,,,,,,,,
+PWM_MATT,LinAlgError: Singular matrix,,,,,,,,,
+PWM_MATT_MIN,,197.0,101.0,0.23474628940267236,4.057695715071108,-7.718191172359201,8.187683751164545,0.9538664238763453,1614.8984141561173,True
+PWM_OST,LinAlgError: Singular matrix,,,,,,,,,
+PWM_PERC,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TE,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TE_LN,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TP,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TP_LN,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TR,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TRIAL,LinAlgError: Singular matrix,,,,,,,,,
+PWM_TR_LN,,185.0,101.0,6.835020803510562e-05,0.19187854837395377,-0.3760066940107408,0.376143394426811,0.9997157807632604,374.0076669282703,True
+Raven_ACC,,202.0,101.0,0.16068580542263008,0.8294090270355301,-1.4649260160194169,1.786297626864677,0.846383151247418,1158.8818549079238,True
+RAVEN_T,LinAlgError: Singular matrix,,,,,,,,,
+RAVEN_T_LN,LinAlgError: Singular matrix,,,,,,,,,
+TOL_ACC,LinAlgError: Singular matrix,,,,,,,,,
+TOL_TE,LinAlgError: Singular matrix,,,,,,,,,
+TOL_TE_LN,,201.0,101.0,-0.12722558114047036,0.06697293934746275,-0.25849013020028283,0.004038967919342107,0.057478209301460165,57.44915058193851,True
+TOL_TP,LinAlgError: Singular matrix,,,,,,,,,
+TOL_TP_LN,,202.0,101.0,0.11385973425986956,0.13073710307387293,-0.14238027920802215,0.3700997477277613,0.3838054521688097,336.1865317406646,True
+TOL_TR,LinAlgError: Singular matrix,,,,,,,,,
+TOL_TR_LN,LinAlgError: Singular matrix,,,,,,,,,
+TOL_VIO_REG,LinAlgError: Singular matrix,,,,,,,,,
+WM_ACC,LinAlgError: Singular matrix,,,,,,,,,
+WM_SPAN,LinAlgError: Singular matrix,,,,,,,,,
+WM_TRIAL,LinAlgError: Singular matrix,,,,,,,,,

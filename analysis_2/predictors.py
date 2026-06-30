@@ -34,6 +34,26 @@ def candidate_predictors(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def questionnaire_predictors(df: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for column in sorted(
+        column for column in df.columns if str(column).startswith(("ABAS_", "BRIEF_"))
+    ):
+        values = to_numeric(df[column])
+        if values.notna().sum() < MIN_N or values.nunique(dropna=True) < 2:
+            continue
+        rows.append(
+            {
+                "predictor": column,
+                "type": "questionnaire",
+                "n": int(values.notna().sum()),
+                "mean": values.mean(),
+                "sd": values.std(ddof=1),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def zscore(series: pd.Series) -> pd.Series:
     values = to_numeric(series)
     sd = values.std(ddof=1)
@@ -72,8 +92,63 @@ def fit_model(data: pd.DataFrame, interaction: bool, questionnaire: bool) -> dic
     }
 
 
+def pre_questionnaire_models(df: pd.DataFrame) -> pd.DataFrame:
+    predictors = questionnaire_predictors(df)
+    pairs = find_prepost_pairs(df)
+    rows = []
+    for predictor in predictors["predictor"].tolist():
+        for pair in pairs:
+            data = df[[predictor, pair["pre_col"], "age"]].copy()
+            data["predictor_z"] = zscore(data[predictor])
+            data["outcome_z"] = zscore(data[pair["pre_col"]])
+            data["age_z"] = zscore(data["age"])
+            data = data.dropna(subset=["predictor_z", "outcome_z", "age_z"])
+            base = {
+                "predictor": predictor,
+                "outcome": pair["variable"],
+                "pre_col": pair["pre_col"],
+                "domain": pair["domain"],
+                "transformation": pair["transformation"],
+                "n": len(data),
+                "model": "PRE outcome_z ~ questionnaire predictor_z + age_z",
+            }
+            if len(data) < MIN_N:
+                rows.append({**base, "status": "insufficient_data"})
+                continue
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    fit = smf.ols(
+                        "outcome_z ~ predictor_z + age_z",
+                        data=data,
+                    ).fit(cov_type="HC3")
+                ci = fit.conf_int().loc["predictor_z"]
+                rows.append(
+                    {
+                        **base,
+                        "status": "ok",
+                        "term": "predictor_z",
+                        "beta_standardized": fit.params["predictor_z"],
+                        "se_hc3": fit.bse["predictor_z"],
+                        "ci_low": ci.iloc[0],
+                        "ci_high": ci.iloc[1],
+                        "p_value": fit.pvalues["predictor_z"],
+                        "r_squared": fit.rsquared,
+                        "adj_r_squared": fit.rsquared_adj,
+                    }
+                )
+            except Exception as exc:
+                rows.append({**base, "status": f"{type(exc).__name__}: {exc}"})
+    result = fdr_bh(pd.DataFrame(rows), "p_value")
+    if not result.empty:
+        result["significant_p05"] = result["p_value"] < ALPHA
+        result["significant_fdr05"] = result["q_fdr_bh"] < ALPHA
+    return result
+
+
 def run(df: pd.DataFrame, individual_effectiveness: pd.DataFrame) -> dict:
     predictors = candidate_predictors(df)
+    pre_questionnaire = pre_questionnaire_models(df)
     source = df.set_index(ID_COLUMN)
     valid_effectiveness = individual_effectiveness[individual_effectiveness["status"] == "ok"].copy()
     main_rows = []
@@ -119,8 +194,20 @@ def run(df: pd.DataFrame, individual_effectiveness: pd.DataFrame) -> dict:
             "predictor_dictionary": predictors,
             "main_models": main,
             "moderation_models": moderation,
+            "pre_questionnaire_models": pre_questionnaire,
+            "significant_pre_questionnaire": pre_questionnaire[
+                pre_questionnaire.get("significant_p05", False) == True
+            ]
+            if not pre_questionnaire.empty
+            else pre_questionnaire,
             "significant_main": main[main.get("significant_p05", False) == True] if not main.empty else main,
             "significant_moderation": moderation[moderation.get("significant_p05", False) == True] if not moderation.empty else moderation,
         },
     )
-    return {"predictors": predictors, "main": main, "moderation": moderation, "files": [path]}
+    return {
+        "predictors": predictors,
+        "main": main,
+        "moderation": moderation,
+        "pre_questionnaire": pre_questionnaire,
+        "files": [path],
+    }

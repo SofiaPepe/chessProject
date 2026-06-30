@@ -1,0 +1,660 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Chess-Based Training and Adaptive Functioning: A Study with Italian Preschool and Primary School Children},
+  pdfauthor={Nome Autore},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Chess-Based Training and Adaptive Functioning: A Study with
+Italian Preschool and Primary School Children}
+\author{Nome Autore}
+\date{2026-03-12}
+\begin{document}
+\maketitle
+
+
+\section{Abstract}\label{abstract}
+
+This study examined whether an eight-session Giant Chess Game training
+protocol was associated with changes in cognitive, navigational, and
+adaptive-functioning outcomes in Italian children aged 5 to 7 years. The
+final analytic database included 101 children (57 experimental, 44
+control). Minefield route-efficiency scores were recalculated from raw
+data when available and otherwise retained from the historical database.
+Analyses were rerun with the final database using a reproducible Python
+pipeline. PRE scores were first screened for sex and age differences;
+training effects were then tested as between-group differences in
+PRE-to-POST change with HC3 robust standard errors, with age-adjusted
+ANCOVA models as sensitivity analyses. No group x time effect survived
+FDR correction across the 45 PRE-POST outcomes. Baseline performance
+showed expected age-related differences, particularly for Raven
+accuracy, Tower of London rule violations, and Moles Task working-memory
+measures. Predictor analyses suggested that teacher-rated adaptive
+functioning was associated with selected cognitive-effectiveness
+outcomes, most clearly for ABAS-II Health and Safety predicting Tower of
+London accuracy effectiveness. Overall, the final analyses did not
+provide corrected evidence for a generalized training effect, but they
+documented meaningful developmental variation in baseline navigational
+and executive-function measures.
+
+\section{Introduzione}\label{introduzione}
+
+Chess-based educational activities have been proposed as a promising
+context for training planning, working memory, inhibitory control, and
+adaptive problem solving in childhood. The present study tested a
+school-based Giant Chess Game protocol designed for preschool and early
+primary-school children. The intervention used a large physical
+chessboard to make spatial relations, piece movements, and rule-based
+planning concrete and embodied. The study focused on whether children
+who received the chess protocol showed greater PRE-to-POST improvement
+than children in a matched control condition, and whether
+adaptive-functioning and everyday executive-function ratings were
+associated with individual cognitive change.
+
+\section{Methods}\label{methods}
+
+\subsection{Sample}\label{sample}
+
+The source recruitment sample comprised 104 typically developing Italian
+children aged between 5 and 7 years. After database cleaning and
+availability checks, the final analytic database included 101 children
+(55 boys, 46 girls; mean age = 6.43 years, SD = 0.65). Fifty-seven
+children were assigned to the Experimental Chess Protocol Group (GSPS),
+and 44 were assigned to the Control Group (CG). The final age
+distribution was 9 children aged 5 years, 40 aged 6 years, and 52 aged 7
+years.
+
+Participants were recruited from the third year of two preschools (``D.
+Ricci'' in Acquasparta and ``G.S. Bernardo'' in Narni) and from the
+first and second years of four primary schools (``A.B. Sabin'' in
+Acquasparta, Montecchio Primary School, ``Narni S. Lucia'', and ``Narni
+Centro''). To support equivalence between groups, each experimental
+class was matched with a control class of the same school level. After
+testing, children in the control group also participated in chess
+activities. Inclusion criteria were: native Italian speakers, no primary
+sensory deficits, no neurological conditions, and no significant
+psychiatric or developmental disorders. General cognitive functioning
+was assessed with Raven's Coloured Progressive Matrices, a non-verbal
+measure of intellectual ability (@raven1995). A Raven cut-off
+sensitivity check was also conducted using age-specific fifth-percentile
+thresholds. None of the children had prior structured chess experience.
+The study adhered to the ethical principles of the Declaration of
+Helsinki and was approved by the local ethics committee. Written
+informed consent was obtained from parents, and assent from each child.
+
+\subsection{Testing at T0 and T1}\label{testing-at-t0-and-t1}
+
+Children were individually tested in a quiet room at school. The GSPS
+group was assessed immediately before (T0) and after (T1) participating
+in the Giant Chess Game training. The control group, which continued
+regular classroom activities without chess practice, was also tested at
+T0 and T1. The order of tests was counterbalanced for each participant.
+
+\subsubsection{Corsi Block-Tapping Test}\label{corsi-block-tapping-test}
+
+The Corsi Block-Tapping Test (CBT; @monaco2013span; @corsi1972) was used
+to assess visuospatial working memory and short-term memory. The test
+uses a board with nine wooden blocks arranged in a scattered pattern.
+During the task, the examiner taps a sequence of blocks at a fixed pace,
+and the child reproduces the same sequence. The test begins with
+sequences of two blocks and increases progressively. The span score
+corresponds to the longest sequence level correctly reproduced according
+to the task rules. Parallel versions were used at T0 and T1.
+
+\subsubsection{Tower of London}\label{tower-of-london}
+
+The Tower of London (TOL; Shallice, 1982), included in the BVN 5-11
+battery (Bisiacchi et al., 2005), assesses planning, problem solving,
+and the ability to anticipate consequences. Children must reproduce
+target configurations using colored balls and pegs, while respecting
+task rules about move order, peg capacity, and minimal solutions.
+
+\subsubsection{Moles Task}\label{moles-task}
+
+The Moles Task is a computerized child-friendly task adapted with moles
+as obstacles. It measures spatial memory, navigation skills, and
+visuospatial planning strategies on an 8 x 8 grid. Three conditions were
+administered:
+
+\begin{itemize}
+\tightlist
+\item
+  In the working-memory condition, children viewed mole positions,
+  retained them, and then recalled the exact locations.
+\item
+  In the planning condition, children traced the shortest path from
+  start to finish while avoiding visible obstacles.
+\item
+  In the working-memory-planning condition, obstacles disappeared before
+  response, requiring children to remember their positions and plan an
+  efficient route.
+\end{itemize}
+
+Raw Minefield data were rescored when available. Minimum paths were
+recalculated from \texttt{configuration\_trial.xlsx}, allowing
+orthogonal movement only and treating obstacle cells as blocked. The
+current paper analyses used
+\texttt{data/FINAL\_DATABASE\_RECALCULATED\_MINEFIELD.xlsx}, which
+preserves the original database schema and updates only Planning and
+working-memory-planning route-efficiency percentages when raw
+recalculation is available.
+
+\subsubsection{Teacher Questionnaires}\label{teacher-questionnaires}
+
+The ABAS-II (Adaptive Behavior Assessment System, Second Edition;
+@harrison2003; @ferri2014) was used to assess adaptive functioning in
+the school context. The teacher form provides scores for adaptive
+domains and broader composite indices. The BRIEF-2 (Behavior Rating
+Inventory of Executive Function, Second Edition; @gioia2015) was used to
+assess everyday executive functioning. Items are rated by teachers and
+provide clinical scales and composite indices covering behavioral,
+emotional, and cognitive regulation.
+
+\subsection{Giant Chess Game Training}\label{giant-chess-game-training}
+
+The Giant Chess Game consisted of 8 weekly chess lessons, each lasting 1
+hour and divided into three work units. Lessons were conducted by a
+chess master affiliated with FIDE. The large chessboard measured 2.5 m x
+2.5 m and was divided into 8 rows and 8 columns.
+
+\subsubsection{Work Unit 1}\label{work-unit-1}
+
+Children first explored the giant chessboard freely and were guided
+through simple spatial movements, such as one step forward, two steps
+backward, or one step to the right. The teacher introduced squares,
+rows, and diagonals through embodied play activities.
+
+\subsubsection{Work Unit 2}\label{work-unit-2}
+
+The teacher introduced the King and Queen. Children practiced movement
+rules through structured games such as ``Catch the King'', and through
+problem situations requiring them to reason about controlled space on
+the board.
+
+\subsubsection{Work Unit 3}\label{work-unit-3}
+
+The Knight was introduced through movement games emphasizing its
+L-shaped displacement. Children practiced rotating the movement pattern
+in different spatial directions and adapting it to the board boundaries.
+
+\section{Results}\label{results}
+
+Analyses were rerun using the final paper database,
+\texttt{data/FINAL\_DATABASE\_RECALCULATED\_MINEFIELD.xlsx}, through the
+reproducible \texttt{analysis\_2} pipeline. The final analysis dataset
+included 101 participants. PRE scores were screened for demographic
+differences using Welch independent-samples t-tests. Sex differences
+were tested by comparing boys and girls on each PRE outcome. Age
+differences were tested with pairwise comparisons among 5-, 6-, and
+7-year-old children. Multiple comparisons were corrected using the
+Benjamini-Hochberg false-discovery-rate (FDR) procedure.
+
+Training effects were tested across 45 PRE-POST outcomes. The primary
+model compared PRE-to-POST change between groups using HC3 robust
+standard errors, which is equivalent to the group x time interaction
+when there are two occasions. Age-adjusted ANCOVA sensitivity models
+tested POST scores as a function of PRE score, group, and age. Tables
+report uncorrected p values as p raw, together with FDR-adjusted q
+values and effect-size estimates when available.
+
+As a preliminary data-quality check, Raven PRE accuracy was screened
+against age-specific fifth-percentile cut-offs. Participants were
+flagged when Raven PRE accuracy was \textless= 10 at age 5, \textless=
+11 at age 6, or \textless= 12 at age 7. Two participants in the final
+analytic database fell below these cut-offs: one 5-year-old child in the
+experimental group and one 7-year-old child in the control group. This
+check was retained as a sensitivity/data-quality audit and was not used
+to change the primary paper database.
+
+Time-based outcomes were logarithmically transformed before analysis
+when appropriate.
+
+\subsection{Training's Effect on Cognitive
+Abilities}\label{trainings-effect-on-cognitive-abilities}
+
+Before testing training effects, PRE scores were screened for possible
+demographic differences. No sex-related difference survived FDR
+correction. Age-related differences survived FDR correction for eight
+PRE outcomes: raw and log-transformed Planning execution/total time,
+Raven accuracy, Tower of London rule violations, Moles Task
+working-memory accuracy, Moles Task working-memory span, and Moles Task
+working-memory trials. The significant age comparisons are summarized
+below.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1154}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1154}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1538}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1538}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1538}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1538}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1538}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+PRE outcome
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Significant age comparison
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Younger group M
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Older group M
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Hedges g
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p raw
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+FDR q
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PLANNING\_TR\_LN & 7 vs.~6 & 5.80 & 5.27 & -1.13 & \textless{} .001 &
+\textless{} .001 \\
+PLANNING\_TE\_LN & 7 vs.~6 & 5.57 & 5.03 & -1.11 & \textless{} .001 &
+\textless{} .001 \\
+PLANNING\_TR & 7 vs.~6 & 359.41 & 216.68 & -1.14 & \textless{} .001 &
+\textless{} .001 \\
+Raven\_ACC & 7 vs.~6 & 19.00 & 22.83 & .83 & \textless{} .001 & .005 \\
+WM\_TRIAL & 7 vs.~5 & 3.00 & 4.54 & 1.11 & \textless{} .001 & .011 \\
+TOL\_VIO\_REG & 7 vs.~5 & 5.00 & 2.38 & -1.21 & \textless{} .001 &
+.011 \\
+WM\_SPAN & 7 vs.~5 & 1.89 & 2.94 & .97 & \textless{} .001 & .011 \\
+WM\_TRIAL & 7 vs.~6 & 3.51 & 4.54 & .72 & .001 & .020 \\
+WM\_SPAN & 7 vs.~6 & 2.14 & 2.94 & .71 & .001 & .021 \\
+WM\_ACC & 7 vs.~6 & 1.35 & 2.44 & .69 & .002 & .032 \\
+\end{longtable}
+}
+
+Across the 45 PRE-POST outcomes tested, no group x time effect survived
+FDR correction. The strongest uncorrected effects are reported below.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrlrrr@{}}
+\toprule\noalign{}
+Outcome & Group x time beta & 95\% CI & partial eta2 & p raw & FDR q \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+CBT\_F\_SPAN & -.64 & {[}-1.16, -.12{]} & .056 & .015 & .452 \\
+WM\_ACC & .93 & {[}.15, 1.72{]} & .054 & .020 & .452 \\
+TOL\_TE & -18.38 & {[}-36.29, -.47{]} & .040 & .044 & .665 \\
+TOL\_TE\_LN & -.13 & {[}-.26, .01{]} & .034 & .064 & .716 \\
+PWM\_EFF & -2.66 & {[}-6.35, 1.02{]} & .020 & .157 & .811 \\
+PLANNING\_MATTI\_MIN & -3.23 & {[}-7.94, 1.49{]} & .019 & .179 & .811 \\
+PLANNING\_TP\_LN & .25 & {[}-.12, .62{]} & .018 & .191 & .811 \\
+PWM\_PERC & 7.03 & {[}-3.52, 17.57{]} & .017 & .192 & .811 \\
+\end{longtable}
+}
+
+The age-adjusted ANCOVA sensitivity analyses also found no group effect
+surviving FDR correction. Thus, the final analysis did not provide
+corrected evidence that the experimental group improved more than the
+control group from T0 to T1.
+
+\subsection{Relationship between Autonomy and Executive
+Functions}\label{relationship-between-autonomy-and-executive-functions}
+
+To examine whether adaptive functioning and everyday executive
+functioning were associated with cognitive change, ABAS-II and BRIEF-2
+scores were tested as predictors of individual treatment effectiveness
+across bounded cognitive outcomes. Predictor models were adjusted for
+age, and p values were corrected using the Benjamini-Hochberg FDR
+procedure.
+
+One adaptive-functioning predictor survived FDR correction within the
+ABAS-II/BRIEF-2 predictor set: higher ABAS-II supplemental Health and
+Safety scores predicted greater Tower of London accuracy effectiveness.
+Additional nominal associations are shown below and should be
+interpreted cautiously when the FDR-corrected q value is above .05.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1200}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1200}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1600}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1200}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1600}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1600}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Predictor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Outcome
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+beta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+95\% CI
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p raw
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+FDR q
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+adj. R2
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ABAS\_Health\_saf\_suppongo & Tower of London accuracy effectiveness &
+15.30 & {[}7.83, 22.77{]} & \textless{} .001 & .005 & .220 \\
+BRIEF\_Em\_Con & Planning-working-memory route-efficiency effectiveness
+& 28.35 & {[}9.54, 47.15{]} & .003 & .105 & .061 \\
+ABAS\_school\_liv\_suppongo & Tower of London accuracy effectiveness &
+15.72 & {[}4.93, 26.51{]} & .004 & .136 & .148 \\
+ABAS\_Health\_saf\_sic & Raven accuracy effectiveness & -7.49 &
+{[}-12.79, -2.18{]} & .006 & .165 & .041 \\
+ABAS\_fun\_acc & Planning composite effectiveness & 43.16 & {[}9.89,
+76.43{]} & .011 & .241 & .080 \\
+ABAS\_comm\_use & Planning composite effectiveness & 31.44 & {[}5.59,
+57.29{]} & .017 & .320 & .040 \\
+ABAS\_Leisure & Planning-working-memory composite effectiveness & 10.42
+& {[}1.28, 19.56{]} & .025 & .409 & .066 \\
+BRIEF\_ERI & Planning-working-memory route-efficiency effectiveness &
+20.24 & {[}2.46, 38.03{]} & .026 & .409 & .040 \\
+ABAS\_Leisure & Planning-working-memory accuracy effectiveness & 11.30 &
+{[}1.16, 21.44{]} & .029 & .409 & .040 \\
+ABAS\_school\_liv\_suppongo & Raven accuracy effectiveness & 13.74 &
+{[}0.70, 26.77{]} & .039 & .476 & .095 \\
+\end{longtable}
+}
+
+\subsection{Navigational Planning Skills in the 5-7 Age
+Group}\label{navigational-planning-skills-in-the-5-7-age-group}
+
+To describe baseline navigational planning abilities in the full
+analytic sample, PRE Moles Task performance was summarized separately
+for 5-, 6-, and 7-year-old children. Means and standard deviations are
+reported in the table below. The age effect size is reported as eta2
+from one-way ANOVA across the three age groups.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1304}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Moles Task PRE outcome
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Age 5 M (SD)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Age 6 M (SD)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Age 7 M (SD)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Age effect eta2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p raw
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Working memory span & 1.89 (.60) & 2.14 (1.11) & 2.94 (1.13) & .140 &
+\textless{} .001 \\
+Working memory trials & 3.00 (.87) & 3.51 (1.39) & 4.54 (1.43) & .155 &
+\textless{} .001 \\
+Working memory accuracy & 1.22 (1.30) & 1.35 (1.67) & 2.44 (1.49) & .118
+& .003 \\
+Planning trials & 8.56 (2.55) & 8.30 (.88) & 8.16 (.42) & .015 & .501 \\
+Planning accuracy & 13.67 (4.15) & 15.54 (1.26) & 15.42 (1.73) & .073 &
+.030 \\
+Planning optimal-step trials & 1.22 (1.48) & .38 (1.04) & .52 (1.62) &
+.027 & .277 \\
+Planning tiles used & 69.89 (20.91) & 74.30 (12.83) & 66.76 (15.13) &
+.055 & .071 \\
+Planning minimum tiles & 56.22 (16.98) & 60.08 (3.95) & 58.56 (10.82) &
+.014 & .520 \\
+Planning route efficiency (\%) & 85.05 (10.12) & 86.09 (9.94) & 91.01
+(8.46) & .074 & .024 \\
+Planning composite & 85.23 (12.49) & 91.38 (5.88) & 93.60 (6.54) & .108
+& .005 \\
+Working-memory-planning trials & 4.78 (1.56) & 5.05 (1.99) & 5.76 (2.19)
+& .035 & .191 \\
+Working-memory-planning accuracy & 3.89 (2.32) & 4.57 (2.69) & 5.44
+(2.68) & .040 & .148 \\
+Working-memory-planning optimal-step trials & 2.56 (.73) & 2.51 (.65) &
+2.84 (1.11) & .030 & .248 \\
+Working-memory-planning tiles used & 22.67 (12.13) & 24.84 (16.12) &
+30.18 (16.77) & .033 & .210 \\
+Working-memory-planning minimum tiles & 19.78 (10.80) & 23.59 (13.96) &
+26.60 (14.73) & .023 & .335 \\
+Working-memory-planning route efficiency (\%) & 87.69 (10.19) & 95.78
+(34.27) & 90.13 (9.36) & .018 & .422 \\
+Working-memory-planning composite & 56.00 (10.31) & 59.38 (10.40) &
+62.04 (10.22) & .034 & .201 \\
+\end{longtable}
+}
+
+Overall, baseline Moles Task scores showed the expected developmental
+pattern: older children tended to achieve higher working-memory scores
+and better planning-composite performance, whereas several
+working-memory-planning indices showed weaker age separation.
+
+\section{Discussion}\label{discussion}
+
+The final rerun of the paper analyses did not show FDR-corrected
+evidence for a generalized chess-training effect across cognitive,
+navigational, and timing outcomes. The strongest uncorrected effects
+involved forward Corsi span, Moles Task working-memory accuracy, and
+Tower of London execution time, but these effects did not survive
+correction for the 45 PRE-POST outcomes tested. The age-adjusted ANCOVA
+sensitivity analyses led to the same conclusion, suggesting that the
+absence of corrected group effects was not explained by baseline age
+differences.
+
+At baseline, age was clearly associated with several outcomes.
+Seven-year-old children generally performed better than younger children
+on Raven accuracy and Moles Task working-memory measures, and they
+showed lower Tower of London rule violations. These results support the
+developmental sensitivity of the cognitive and navigational measures in
+the 5-7 age range.
+
+The predictor analyses suggest that adaptive functioning may be
+informative for individual differences in cognitive change. In
+particular, teacher-rated ABAS-II Health and Safety was associated with
+Tower of London accuracy effectiveness after FDR correction. Other
+ABAS-II and BRIEF-2 associations were nominal and should be treated as
+exploratory. These findings are consistent with the idea that everyday
+adaptive skills may capture individual differences relevant to
+structured problem solving, although the present results do not support
+strong claims about broad intervention-driven change.
+
+Several limitations should be considered. The sample was relatively
+small for detecting modest group x time effects after correction across
+many outcomes. The age distribution was unbalanced, with fewer
+5-year-old children than 6- and 7-year-old children. In addition, the
+full best-available Minefield database was created as an audit resource
+but was not yet promoted to the primary paper pipeline; therefore, the
+present paper remains based on the final route-efficiency-recalculated
+database.
+
+\section{Conclusions}\label{conclusions}
+
+Using the final paper database, the Giant Chess Game protocol was not
+associated with FDR-corrected evidence of greater PRE-to-POST
+improvement relative to the control group. The analyses did, however,
+document robust age-related differences in baseline cognitive and
+navigational abilities and identified a corrected association between
+teacher-rated adaptive functioning and Tower of London accuracy
+effectiveness. Future analyses can use the newly created full
+best-available Minefield database as an audit basis before deciding
+whether to promote it into the primary paper pipeline.
+
+\section{References}\label{references}
+
+\begin{itemize}
+\tightlist
+\item
+  Insert bibliographic references here.
+\end{itemize}
+
+
+
+
+\end{document}

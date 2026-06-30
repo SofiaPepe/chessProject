@@ -13,6 +13,33 @@ OUT_PATH = OUT_DIR / "pre_measures_age_sex.xlsx"
 SUMMARY_PATH = OUT_DIR / "pre_measures_age_sex_summary.md"
 
 
+def baseline_measure_specs(df: pd.DataFrame) -> list[dict]:
+    specs = [
+        {
+            **pair,
+            "measure_family": "cognitive_pre",
+        }
+        for pair in find_prepost_pairs(df)
+    ]
+    for column in sorted(
+        column for column in df.columns if str(column).startswith(("ABAS_", "BRIEF_"))
+    ):
+        values = to_numeric(df[column])
+        if values.notna().sum() < 20 or values.nunique(dropna=True) < 2:
+            continue
+        specs.append(
+            {
+                "variable": str(column),
+                "pre_col": column,
+                "post_col": "",
+                "domain": "questionnaire",
+                "transformation": "raw",
+                "measure_family": "ABAS_BRIEF_baseline",
+            }
+        )
+    return specs
+
+
 def _welch_ttest(first: pd.Series, second: pd.Series) -> tuple[float, float]:
     first = to_numeric(first).dropna()
     second = to_numeric(second).dropna()
@@ -72,7 +99,7 @@ def _test_pre_measure(df: pd.DataFrame, pair: dict) -> tuple[dict, list[dict], d
         "n_age_7": int((data["age"] == 7).sum()),
         "n_female": int((data["sex"] == "F").sum()),
         "n_male": int((data["sex"] == "M").sum()),
-        "test_family": "Welch independent-samples t-tests on PRE scores",
+        "test_family": "Welch independent-samples t-tests on baseline/PRE scores",
     }
     if len(data) < 20 or data["age"].nunique() < 2 or data["sex"].nunique() < 2:
         summary = {**base, "status": "insufficient_data"}
@@ -176,9 +203,9 @@ def _write_summary(summary: pd.DataFrame, age_tests: pd.DataFrame, sex_tests: pd
     lines = [
         "# PRE measures: age and sex t-tests",
         "",
-        f"- PRE outcomes tested: {len(valid)}",
-        "- Sex check: Welch independent-samples t-tests comparing males and females on each PRE outcome.",
-        "- Age check: pairwise Welch independent-samples t-tests comparing ages 5 vs 6, 5 vs 7, and 6 vs 7 on each PRE outcome.",
+        f"- Baseline/PRE measures tested: {len(valid)}",
+        "- Sex check: Welch independent-samples t-tests comparing males and females on each baseline/PRE measure.",
+        "- Age check: pairwise Welch independent-samples t-tests comparing ages 5 vs 6, 5 vs 7, and 6 vs 7 on each baseline/PRE measure.",
         "- Sex and age p-values were corrected separately using Benjamini-Hochberg FDR.",
         f"- Age outcomes with nominal p < .05 in at least one pairwise comparison: {len(age_nominal)} ({', '.join(age_nominal) or 'none'}).",
         f"- Age outcomes significant after FDR in at least one pairwise comparison: {len(age_fdr)} ({', '.join(age_fdr) or 'none'}).",
@@ -197,7 +224,7 @@ def run(df: pd.DataFrame) -> dict:
     age_descriptives = []
     sex_descriptives = []
 
-    for pair in find_prepost_pairs(df):
+    for pair in baseline_measure_specs(df):
         summary, age_tests, sex_test, age_rows, sex_rows = _test_pre_measure(df, pair)
         summary_rows.append(summary)
         age_test_rows.extend(age_tests)
@@ -221,7 +248,7 @@ def run(df: pd.DataFrame) -> dict:
 
     metadata = pd.DataFrame(
         [
-            {"item": "scope", "value": "PRE measures with a matching POST measure only"},
+            {"item": "scope", "value": "PRE cognitive measures plus baseline ABAS/BRIEF questionnaire measures"},
             {"item": "sex_test", "value": "Welch independent-samples t-test: male vs female"},
             {"item": "age_test", "value": "Pairwise Welch independent-samples t-tests: 5 vs 6, 5 vs 7, 6 vs 7"},
             {"item": "multiplicity", "value": "Benjamini-Hochberg FDR separately for sex tests and age pairwise tests"},

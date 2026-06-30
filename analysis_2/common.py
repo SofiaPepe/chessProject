@@ -277,10 +277,11 @@ def style_workbook(path: Path) -> None:
             sheet.column_dimensions[letter].width = min(max(lengths, default=10) + 2, 45)
             header_lower = str(header or "").lower()
             if header_lower in {"p", "p_value", "q_fdr_bh", "welch_p", "mann_whitney_p", "interaction_p"} or header_lower.endswith("_p"):
-                sheet.conditional_formatting.add(
-                    f"{letter}2:{letter}{sheet.max_row}",
-                    CellIsRule(operator="lessThan", formula=["0.05"], fill=significant_fill),
-                )
+                if sheet.max_row >= 2:
+                    sheet.conditional_formatting.add(
+                        f"{letter}2:{letter}{sheet.max_row}",
+                        CellIsRule(operator="lessThan", formula=["0.05"], fill=significant_fill),
+                    )
                 for cell in sheet[letter][1:]:
                     cell.number_format = "0.00000"
     workbook.save(path)

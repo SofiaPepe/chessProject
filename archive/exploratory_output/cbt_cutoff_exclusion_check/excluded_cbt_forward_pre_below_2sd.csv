@@ -1,0 +1,9 @@
+ID,group,group_label,sex,age,semestre,norm_group,norm_months,norm_mean,norm_sd,cutoff_mean_minus_2sd,CBT_F_SPAN_PRE,below_cutoff
+GC03,1,experimental,M,5,1,MC2,65-74,3.69,0.66,2.37,0,True
+GC09,1,experimental,M,5,1,MC2,65-74,3.69,0.66,2.37,0,True
+PPR21,1,experimental,F,6,2,FC3,75-81,3.54,0.79,1.96,0,True
+AC05,2,control,M,6,2,MC3,75-81,3.73,0.63,2.4699999999999998,0,True
+AC11,2,control,M,6,2,MC3,75-81,3.73,0.63,2.4699999999999998,0,True
+PPR06,2,control,M,6,2,MC3,75-81,3.73,0.63,2.4699999999999998,0,True
+EXP14,1,experimental,F,7,2,FC4,82-96,3.81,0.57,2.67,0,True
+SPR8,2,control,M,7,1,MC4,82-96,3.4,0.76,1.88,0,True
