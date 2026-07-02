@@ -1,0 +1,95 @@
+---
+title: "Adaptive Functioning, Everyday Executive Functioning, and Baseline Navigational Skills in Children"
+author: "Nome Autore"
+date: "2026-07-01"
+format:
+  html: default
+  pdf: default
+---
+
+# Abstract
+
+This paper will examine whether everyday adaptive functioning and autonomy,
+measured with ABAS-II, and everyday executive functioning, measured with
+BRIEF-2, are associated with children's baseline navigational and visuospatial
+abilities. The analysis is cross-sectional and uses only PRE scores from the
+final database, treating the sample as if no training and no second assessment
+had occurred.
+
+# Introduction
+
+Children's ability to navigate space develops within everyday relationships,
+opportunities for movement, and repeated interactions with meaningful
+environments. A broad developmental perspective suggests that attachment
+relationships, autonomy-supportive contexts, and embodied motor experience may
+all contribute to how children explore, plan routes, remember spatial
+locations, and solve navigation-like problems.
+
+In this preliminary version, the theoretical background is intentionally brief.
+The final introduction will expand the links among attachment theory, autonomy,
+motor experience, adaptive functioning, executive functioning, and navigational
+development.
+
+# Methods
+
+## Participants
+
+The analytic sample includes all valid participants from the final database
+used in the larger project. The present paper does not use training group,
+POST scores, or PRE-to-POST change. All analyses are based on baseline/PRE
+measures only.
+
+## Measures
+
+Children completed baseline cognitive, visuospatial, and Minefield measures.
+Teacher questionnaires included ABAS-II adaptive functioning scales and BRIEF-2
+everyday executive-function scales and indices. ABAS and BRIEF total scores
+were derived in the analysis pipeline.
+
+### Minefield Variables
+
+The Minefield task includes working-memory, planning, and working-memory plus
+planning conditions. PRE outcome variables include accuracy, span/trial
+measures, route-efficiency percentages, time measures, error/obstacle-related
+measures, and derived composite scores. Time variables are also available as
+log-transformed PRE scores when defined by the shared project pipeline.
+
+## Statistical Analysis
+
+The analysis was run with:
+
+```powershell
+python abas_brief_navigation_paper\analysis\run_analysis.py
+```
+
+Descriptive analyses summarized sample composition, missingness, questionnaire
+scores, and PRE outcomes. Questionnaire-PRE associations were tested with both
+Pearson and Spearman correlations. Primary regression models predicted each
+standardized PRE outcome from each standardized ABAS/BRIEF variable, adjusting
+for standardized age:
+
+```text
+outcome_PRE_z ~ questionnaire_z + age_z
+```
+
+HC3 robust standard errors were used. Benjamini-Hochberg FDR correction was
+applied within each result family. The main text reports FDR-significant
+results only. Additional sensitivity outputs include Minefield-only focus
+models and models additionally adjusting for Raven PRE accuracy.
+
+# Results
+
+{{< include ../output/tables/paper_results_summary.md >}}
+
+# Discussion
+
+The discussion will interpret whether teacher-rated autonomy, adaptive
+functioning, and everyday executive functioning are associated with baseline
+navigational and visuospatial skills. It will also distinguish associations
+that appear specific to Minefield navigation outcomes from broader associations
+with Raven, Corsi, and Tower of London performance.
+
+Limitations to expand include the cross-sectional design, multiple testing,
+teacher-report measurement, missingness in supplemental ABAS variables, and the
+need to separate adaptive autonomy from general cognitive development.
+
