@@ -77,6 +77,18 @@ applied within each result family. The main text reports FDR-significant
 results only. Additional sensitivity outputs include Minefield-only focus
 models and models additionally adjusting for Raven PRE accuracy.
 
+The dedicated total-and-subscale analysis excluded Raven from the outcome
+set. Its primary sample excluded the two children flagged by the age-specific
+Raven screening cut-offs (n = 99), and the full sample (n = 101) was analysed
+as a sensitivity check. Twenty-five curated PRE outcomes were tested in
+separate blocks for complete-case ABAS and BRIEF totals, eight standard ABAS
+scales, nine standard BRIEF scales, and the BRIEF BRI, ERI, and CRI indices.
+ABAS supplemental `suppongo` variables were excluded. Each standardized model
+was estimated with HC3 robust standard errors first adjusting for age and then
+adjusting for age plus Raven PRE accuracy, using identical complete cases for
+the paired specifications. FDR correction was applied separately within each
+prespecified predictor block.
+
 # Results
 
 {{< include ../output/tables/paper_results_summary.md >}}

@@ -32,6 +32,7 @@ from common import (
     write_workbook,
 )
 import paper_config as cfg
+import dedicated_models
 
 
 def clean_output() -> None:
@@ -570,6 +571,7 @@ def prepare_regression_table(frame: pd.DataFrame, q_column: str = "q_fdr_bh") ->
 def write_paper_tables(
     correlations: dict,
     regressions: dict,
+    dedicated: dict,
     dataset: pd.DataFrame,
     outcomes: pd.DataFrame,
     questionnaires: pd.DataFrame,
@@ -645,6 +647,8 @@ def write_paper_tables(
         "### FDR-Significant Raven-Covariate Sensitivity Models",
         "",
         markdown_table(raven_reg, reg_columns, max_rows=80),
+        "",
+        dedicated["paper_markdown"].rstrip(),
     ]
     summary_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     files.append(summary_path)
@@ -658,10 +662,14 @@ def write_summary(
     questionnaires: pd.DataFrame,
     correlations: dict,
     regressions: dict,
+    dedicated: dict,
 ) -> Path:
     valid_corr = correlations["all"].loc[correlations["all"]["status"].eq("ok")]
     primary_ok = regressions["primary"].loc[regressions["primary"]["status"].eq("ok")]
     raven_ok = regressions["raven"].loc[regressions["raven"]["status"].eq("ok")]
+    dedicated_primary = dedicated["models"].loc[
+        dedicated["models"]["sample_scope"].eq("primary_n99")
+    ]
     lines = [
         "# ABAS/BRIEF Navigation PRE Analysis Summary",
         "",
@@ -684,6 +692,10 @@ def write_summary(
         f"- Minefield-focus regressions significant after within-focus FDR: {len(regressions['minefield_significant'])}",
         f"- Raven-covariate sensitivity regressions tested: {len(raven_ok)}",
         f"- Raven-covariate sensitivity regressions significant after FDR: {len(regressions['significant_raven'])}",
+        f"- Dedicated curated non-Raven outcomes: {len(dedicated['outcomes'])}",
+        f"- Dedicated primary screened sample: {int(dedicated['prepared']['included_primary_n99'].sum())}",
+        f"- Dedicated primary model terms tested: {int(dedicated_primary['status'].eq('ok').sum())}",
+        f"- Dedicated primary model terms significant after block-wise FDR: {int(dedicated_primary['significant_fdr05'].sum())}",
         "",
         "## Method Notes",
         "",
@@ -691,6 +703,8 @@ def write_summary(
         "- Primary models used standardized variables and HC3 robust standard errors.",
         f"- Primary model: `{cfg.PRIMARY_MODEL_LABEL}`.",
         "- Multiple testing was controlled with Benjamini-Hochberg FDR within each result family.",
+        "- Dedicated total/subscale models exclude all Raven outcomes and compare identical complete-case samples with and without Raven PRE accuracy as a covariate.",
+        "- Dedicated complete totals require all eight ABAS or all nine BRIEF standard scales; assumed/supplemental ABAS variables are excluded.",
         "- Minefield composites and log-transformed time outcomes were inherited from `analysis_2/common.py`.",
         "",
         "## Reproducibility",
@@ -764,11 +778,15 @@ def main() -> None:
     regressions, elapsed = run_stage("regressions", run_regressions, dataset, outcomes, questionnaires)
     stages.append({"stage": "regressions", "status": "complete", "seconds": elapsed})
 
+    dedicated, elapsed = run_stage("dedicated_totals_subscales", dedicated_models.run, dataset)
+    stages.append({"stage": "dedicated_totals_subscales", "status": "complete", "seconds": elapsed})
+
     _, elapsed = run_stage(
         "paper_tables",
         write_paper_tables,
         correlations,
         regressions,
+        dedicated,
         dataset,
         outcomes,
         questionnaires,
@@ -776,7 +794,15 @@ def main() -> None:
     stages.append({"stage": "paper_tables", "status": "complete", "seconds": elapsed})
 
     total_elapsed = time.perf_counter() - started
-    summary_path = write_summary(total_elapsed, dataset, outcomes, questionnaires, correlations, regressions)
+    summary_path = write_summary(
+        total_elapsed,
+        dataset,
+        outcomes,
+        questionnaires,
+        correlations,
+        regressions,
+        dedicated,
+    )
     manifest_path = write_manifest(stages, total_elapsed)
     print(f"ABAS/BRIEF navigation PRE analysis complete in {total_elapsed:.1f}s", flush=True)
     print(f"Summary: {summary_path}", flush=True)
