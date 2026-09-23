@@ -1,12 +1,12 @@
 ---
 title: "Adaptive Functioning, Everyday Executive Functioning, and Visuospatial Abilities in Children: A Cross-Sectional Study"
-author: "Author name to be inserted"
+author: "Sofia Pepe, Greta Fabiani, and Laura Piccardi"
 format:
   html:
-    toc: true
+    toc: false
     number-sections: false
   docx:
-    toc: true
+    toc: false
 bibliography: ../references/references.bib
 reference-section-title: References
 citeproc: true
@@ -139,12 +139,16 @@ guided by STROBE and SAMPL recommendations [@vonelm2007; @lang2015].
 
 {{< include ../output/tables/table1_participants.md >}}
 
-Table 1 summarises the transition from the source database to the Raven-screened
-analytic sample. Table 2 describes the nine baseline outcomes. The complete
+: Participant flow and composition of the analytic sample. {#tbl-participants}
+
+@tbl-participants summarises the transition from the source database to the
+Raven-screened analytic sample. @tbl-outcomes describes the nine baseline outcomes. The complete
 ABAS-II total was available for 95 children and the complete BRIEF-2 total for
 96 children; model-specific sample sizes also reflected outcome missingness.
 
 {{< include ../output/tables/table2_outcomes.md >}}
+
+: Descriptive statistics for the nine baseline outcomes. {#tbl-outcomes}
 
 The descriptive audit retained one negative `PLANNING_EFF` value and three
 negative `PWM_EFF` values. No case was changed or excluded on the basis of an
@@ -154,19 +158,33 @@ EFF value.
 
 {{< include ../output/tables/results_narrative.md >}}
 
+The distribution of significant results across the prespecified FDR families is
+reported in @tbl-fdr-families.
+
 {{< include ../output/tables/table3_block_summary.md >}}
+
+: Results of FDR correction within each prespecified family. {#tbl-fdr-families}
 
 ### Complete Questionnaire Totals
 
+The FDR-significant associations involving questionnaire total scores are
+reported in @tbl-total-scores.
+
 {{< include ../output/tables/table4_totals.md >}}
+
+: FDR-significant associations involving questionnaire total scores. {#tbl-total-scores}
 
 ### Questionnaire Scales and BRIEF-2 Indices
 
+The corresponding results for questionnaire scales and BRIEF-2 indices are
+reported in @tbl-scales-indices. All FDR-significant associations are displayed
+with their 95% confidence intervals in @fig-significant-associations.
+
 {{< include ../output/tables/table5_subscales_indices.md >}}
 
-![FDR-significant standardised coefficients from the primary age-adjusted models. Blue markers represent ABAS-II predictors and orange markers represent BRIEF-2 predictors.](../figures/primary_forest_plot.png){fig-alt="Forest plot of FDR-significant standardized regression coefficients with 95% confidence intervals." width=95%}
+: FDR-significant associations involving questionnaire scales and BRIEF-2 indices. {#tbl-scales-indices}
 
-![Map of FDR-significant questionnaire–outcome associations. Blank cells did not survive correction within their prespecified family.](../figures/significant_beta_heatmap.png){fig-alt="Heatmap of standardized coefficients for significant ABAS-II and BRIEF-2 associations with visuospatial outcomes." width=95%}
+![FDR-significant standardised coefficients from the primary age-adjusted models. Blue markers represent ABAS-II predictors and orange markers represent BRIEF-2 predictors.](../figures/primary_forest_plot.png){#fig-significant-associations fig-alt="Forest plot of FDR-significant standardized regression coefficients with 95% confidence intervals." width=95%}
 
 ## Model Diagnostics
 

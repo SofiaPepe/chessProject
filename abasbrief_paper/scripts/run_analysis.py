@@ -602,7 +602,7 @@ def write_paper_tables(
         "22 independent phenomena because correlated questionnaire scales frequently mapped ",
         "onto the same cognitive outcomes.",
         "",
-        f"Five FDR-significant coefficients were observed in the separate-total models; no coefficient survived FDR in the joint-total models. {len(secondary)} significant coefficients involved ABAS-II subscales, BRIEF-2 subscales, or BRIEF-2 indices.",
+        f"Five FDR-significant associations involved questionnaire total scores, and {len(secondary)} involved subscales or BRIEF-2 indices.",
         "",
         f"Planning accuracy was associated with {len(planning)} questionnaire predictors after FDR correction. No FDR-significant association was observed for either excess-tile outcome, PWM accuracy, or Corsi forward span.",
     ]

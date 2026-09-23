@@ -709,10 +709,8 @@ write_paper_tables <- function(descriptives, models, block_summary) {
     "onto the same cognitive outcomes.",
     "",
     paste0(
-      "Five FDR-significant coefficients were observed in the separate-total models; ",
-      "no coefficient survived FDR in the joint-total models. ", nrow(secondary),
-      " significant coefficients involved ABAS-II subscales, BRIEF-2 subscales, ",
-      "or BRIEF-2 indices."
+      "Five FDR-significant associations involved questionnaire total scores, and ",
+      nrow(secondary), " involved subscales or BRIEF-2 indices."
     ),
     "",
     paste0(

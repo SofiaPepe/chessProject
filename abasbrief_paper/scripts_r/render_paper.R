@@ -16,8 +16,7 @@ if (!file.exists(source_path)) {
 required <- c(
   file.path(OUTPUT_ROOT, "analysis_results.xlsx"),
   file.path(TABLE_ROOT, "results_narrative.md"),
-  file.path(FIGURE_ROOT, "primary_forest_plot.png"),
-  file.path(FIGURE_ROOT, "significant_beta_heatmap.png")
+  file.path(FIGURE_ROOT, "primary_forest_plot.png")
 )
 missing <- required[!file.exists(required)]
 if (length(missing) > 0L) {

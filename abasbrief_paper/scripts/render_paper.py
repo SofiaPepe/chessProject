@@ -21,7 +21,6 @@ def main() -> None:
         cfg.OUTPUT_ROOT / "analysis_results.xlsx",
         cfg.TABLE_ROOT / "results_narrative.md",
         cfg.FIGURE_ROOT / "primary_forest_plot.png",
-        cfg.FIGURE_ROOT / "significant_beta_heatmap.png",
     ]
     missing = [path for path in required if not path.exists()]
     if missing:
